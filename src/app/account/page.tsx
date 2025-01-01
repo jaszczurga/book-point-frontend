@@ -1,8 +1,8 @@
 
-export default function Home() {
+export default function Account() {
   return (
     <div className="h-full flex justify-center items-center">
-       <p>helllloooo</p>
+      <p>Account page</p>
     </div>
   );
 }
