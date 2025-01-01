@@ -9,18 +9,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "rgb(var(--color-background))",
-        primary: "rgb(var(--color-primary))",
-        secondary: "rgb(var(--color-secondary))",
-        accent: "rgb(var(--color-accent))",
-        textColor: "rgb(var(--color-text))",
-        border: "rgb(var(--color-border))",
-        success: "rgb(var(--color-success))",
-        warning: "rgb(var(--color-warning))",
-        error: "rgb(var(--color-error))",
-        textOrange: "rgb(var(--color-text-orange))",
-        bgOrange: "rgb(var(--color-bg-light-orange))",
-        textDark: "rgb(var(--color-text-dark))",
+        colorUg: "rgb(var(--color-UG))",
+        colorHeader: "rgb(var(--color-header))",
+        hoverUg: "rgb(var(--hover-UG))",
+        granatUg: "rgb(var(--granat-UG))",
+        lightBlue: "rgb(var(--light-white))",
+        pureWhite: "rgb(var(--pure-white))",
+        light: "rgb(var(--light))",
+        colorSuccess: "rgb(var(--color-success))",
+        colorWarning: "rgb(var(--color-warning))",
+        colorError: "rgb(var(--color-error))",
       },
       boxShadow: {
         navShadow: "0 20px 50px -12px rgb(0 0 0 / 0.34)",
