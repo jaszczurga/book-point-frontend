@@ -5,7 +5,7 @@ interface NavItemProps {
     href: string;
     label: string;
     isActive?: boolean;
-    onClick?: () => void; // Optional onClick prop
+    onClick?: () => void;
 }
 
 const NavItem: React.FC<NavItemProps> = ({ href, label, isActive = false, onClick }) => {

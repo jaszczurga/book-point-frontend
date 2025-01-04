@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import {Header} from "@/components/layout/navbar/header";
+import {AuthProvider} from "@/app/providers";
 
 export const metadata: Metadata = {
   title: "Book Point",
@@ -15,10 +16,10 @@ export default function RootLayout({
     return (
         <html lang="en">
         <body className={"bg-pureWhite text-pureWhite"}>
-        {/*<AuthProvider>*/}
+        <AuthProvider>
             <Header/>
             {children}
-        {/*</AuthProvider>*/}
+        </AuthProvider>
         </body>
         </html>
     );
