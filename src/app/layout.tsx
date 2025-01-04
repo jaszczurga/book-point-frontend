@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import {AuthProvider} from "@/app/providers";
-import {Header} from "@/components/header";
+import {Header} from "@/components/layout/navbar/header";
 
 export const metadata: Metadata = {
   title: "Book Point",
@@ -14,12 +13,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" suppressHydrationWarning>
-        <body>
-        <AuthProvider>
+        <html lang="en">
+        <body className={"bg-pureWhite text-pureWhite"}>
+        {/*<AuthProvider>*/}
             <Header/>
             {children}
-        </AuthProvider>
+        {/*</AuthProvider>*/}
         </body>
         </html>
     );

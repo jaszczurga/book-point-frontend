@@ -3,16 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --color-UG: rgb(0, 65, 210);
-  --color-header: rgb(5, 45, 115);
-  --hover-UG: rgb(0, 52, 167);
-  --granat-UG: rgb(5, 45, 115);
-  --light-white: rgb(161, 218, 248);
-  --pure-white: rgb(255, 255, 255);
-  --light: rgb(245, 245, 245);
-  --color-success: rgb(40, 167, 69);
-  --color-warning: rgb(255, 193, 7);
-  --color-error: rgb(220, 53, 69);
+  --color-UG: 0, 65, 210;
+  --color-header: 5, 45, 115;
+  --hover-UG: 0, 52, 167;
+  --granat-UG: 5, 45, 115;
+  --light-white: 61, 218, 248;
+  --pure-white: 255, 255, 255;
+  --light: 245, 245, 245;
+  --color-success: 40, 167, 69;
+  --color-warning: 255, 193, 7;
+  --color-error: 220, 53, 69;
 }
 
 .example {
@@ -35,7 +35,7 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  color: var(--color-header);
+  background: white;
   height: 100vh;
 }
 
