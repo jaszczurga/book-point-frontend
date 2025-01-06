@@ -1,6 +1,6 @@
 import KeycloakProvider from "next-auth/providers/keycloak";
 import {JWT} from "@auth/core/jwt";
-import {NextAuthConfig, Session} from "next-auth";
+import {NextAuthConfig, Session, User} from "next-auth";
 import {AdapterSession} from "@auth/core/adapters";
 
 export const authOptions: NextAuthConfig = {
@@ -34,6 +34,10 @@ export const authOptions: NextAuthConfig = {
                 console.log("logout action for token: ", message.token);
                 await fetch(`http://localhost:8081/realms/book-point/protocol/openid-connect/logout?id_token_hint=${message.token.id_token}`);
             }
+        },
+        async signIn(message: {user: User}){
+            console.log(`Sign in event, user: ${message.user.email}`)
+            await fetch("http://localhost:8080/books?categories=t1")
         }
     }
 }

@@ -1,0 +1,72 @@
+
+type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
+
+class FetchWrapper {
+    private baseURL: string;
+    private token: string;
+
+    constructor(baseURL: string, token: string) {
+        this.baseURL = baseURL;
+        this.token = token;
+    }
+
+    private async request<T, B = undefined>(
+        endpoint: string,
+        method: Method,
+        body?: B
+    ): Promise<T> {
+        const url = `${this.baseURL}${endpoint}`;
+        const options: RequestInit = {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${this.token}`,
+            },
+        };
+
+        if (body !== undefined) {
+            options.body = JSON.stringify(body);
+        }
+
+        try {
+            const response = await fetch(url, options);
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new FetchError(response.status, errorData.message || 'Unknown error');
+            }
+
+            return (await response.json()) as T;
+        } catch (error) {
+            console.error('FetchWrapper request error:', error);
+            throw error;
+        }
+    }
+
+    async get<T>(endpoint: string): Promise<T> {
+        return this.request<T>(endpoint, 'GET');
+    }
+
+    async post<T, B>(endpoint: string, body: B): Promise<T> {
+        return this.request<T, B>(endpoint, 'POST', body);
+    }
+
+    async put<T, B>(endpoint: string, body: B): Promise<T> {
+        return this.request<T, B>(endpoint, 'PUT', body);
+    }
+
+    async delete<T>(endpoint: string): Promise<T> {
+        return this.request<T>(endpoint, 'DELETE');
+    }
+}
+
+class FetchError extends Error {
+    status: number;
+    constructor(status: number, message: string) {
+        super(message);
+        this.status = status;
+        this.name = 'FetchError';
+    }
+}
+
+export default FetchWrapper;
