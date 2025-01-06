@@ -1,11 +1,12 @@
+import ApiConfig from "@/lib/backendApi/apiConfiguration";
 
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
 class FetchWrapper {
-    private baseURL: string;
+    private baseURL?: string;
     private token: string;
 
-    constructor(baseURL: string, token: string) {
+    constructor(token: string, baseURL: string = ApiConfig.BaseUrl) {
         this.baseURL = baseURL;
         this.token = token;
     }

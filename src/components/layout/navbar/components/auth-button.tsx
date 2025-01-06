@@ -1,9 +1,10 @@
 import React from "react";
 import {signIn, signOut} from "next-auth/react";
 import NavItem from "@/components/layout/navbar/components/nav-item";
+import {Session} from "next-auth";
 
 type Props = {
-    session: any;
+    session: Session | null;
 }
 
 const AuthButton: React.FC<Props> = ({session}) => {
