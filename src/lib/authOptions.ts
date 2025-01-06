@@ -6,6 +6,12 @@ import FetchWrapper from "@/lib/backendApi/fetchWrapper";
 import {validate} from "json-schema";
 import ApiConfig from "@/lib/backendApi/apiConfiguration";
 
+declare module "next-auth" {
+    interface Session {
+        accessToken: string;
+    }
+}
+
 export const authOptions: NextAuthConfig = {
     providers: [
         KeycloakProvider({
@@ -17,24 +23,28 @@ export const authOptions: NextAuthConfig = {
     callbacks: {
         async jwt({token,user, account}) {
             if (account) {
-                console.log('Account: ', account)
-                token.id_token = account.id_token
-                token.provider = account.provider
-
                 const api = new FetchWrapper(account.access_token ?? '');
                 const userToValidate: ValidateUserReq = {
                     email: user.email as string,
                     firstname: user.name as string,
                     lastname: user.name as string
                 }
-                console.log('User to validate: ', userToValidate)
-                console.log('Token: ', token)
+                console.log('JWT-> User to validate: ', userToValidate)
+                console.log('JWT-> Token: ', token)
                 await api.post<ValidateUserRes,ValidateUserReq>(`${ApiConfig.Endpoints.Auth.Validate}`,userToValidate);
             }
 
-            return token
+            return {
+                ...token,
+                ...user,
+                ...account
+            }
         },
-        session({session}: { session: Session, token: JWT }) {
+        session({session, token}: { session: Session, token: JWT }) {
+            console.log("SESSION-> TOKEN: ", token)
+            if(token){
+                session.accessToken = token.access_token as string;
+            }
             console.log('session: ', session)
             return session
         },
