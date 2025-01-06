@@ -32,6 +32,8 @@ class FetchWrapper {
         try {
             const response = await fetch(url, options);
 
+            console.log('request response:', response);
+            console.log(this.token);
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new FetchError(response.status, errorData.message || 'Unknown error');

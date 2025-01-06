@@ -1,9 +1,8 @@
 import KeycloakProvider from "next-auth/providers/keycloak";
 import {JWT} from "@auth/core/jwt";
-import {NextAuthConfig, Session, User} from "next-auth";
+import {NextAuthConfig, Session} from "next-auth";
 import {AdapterSession} from "@auth/core/adapters";
 import FetchWrapper from "@/lib/backendApi/fetchWrapper";
-import {validate} from "json-schema";
 import ApiConfig from "@/lib/backendApi/apiConfiguration";
 
 declare module "next-auth" {

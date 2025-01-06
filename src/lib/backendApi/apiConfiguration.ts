@@ -6,8 +6,8 @@ const ApiConfig = {
             Login: '/auth/login',
             Register: '/auth/register',
         },
-        Posts: {
-            All: '/posts',
+        Books: {
+            All: '/books',
             Create: '/posts/create',
         },
     },
