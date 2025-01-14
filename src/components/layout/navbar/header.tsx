@@ -26,7 +26,7 @@ export const Header = () => {
     ];
 
     return (
-        <nav className="w-full bg-colorHeader shadow-navShadow">
+        <nav className="w-full bg-colorHeader shadow-navShadow block">
             <div className=" flex flex-wrap items-center justify-between mx-auto p-4">
                 <Logo/>
                 <HamburgerButton setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen}/>

@@ -13,12 +13,15 @@ export const FormSchema = z.object({
     price: z
         .number()
         .min(1, { message: "Price must be greater than 0." }),
+    //todo
     // image: z
     //     .string()
     //     .url({ message: "Invalid URL format." }),
-    category: z
-        .string()
-        .min(1, { message: "Category is required." }),
+    // category: z
+    //     .string()
+    //     .min(1, { message: "Category is required." }),
+    bookImg: z
+        .any(),
     isbn: z
         .string()
         .min(1, { message: "ISBN is required." }),
