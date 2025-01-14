@@ -22,6 +22,10 @@ export default {
       },
       boxShadow: {
         navShadow: "0 20px 50px -12px rgb(0 0 0 / 0.34)",
+      },
+      minWidth: {
+        "form-md": "32rem",
+        "form-sm": "24rem",
       }
     },
   },

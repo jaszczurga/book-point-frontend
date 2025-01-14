@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-        <body className={"bg-pureWhite text-pureWhite"}>
+        <body className={"bg-pureWhite text-black"}>
         <AuthProvider>
             <Header/>
             {children}

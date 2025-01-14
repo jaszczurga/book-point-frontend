@@ -6,8 +6,11 @@ import ApiConfig from "@/lib/backendApi/apiConfiguration";
 export default async function Books() {
 
     const session = await auth();
-    const api = new FetchWrapper(session!.accessToken);
-    const booksList = await api.get<BooksResponse>(ApiConfig.Endpoints.Books.All);
+    const api = new FetchWrapper(session?.accessToken ?? '');
+    const booksList = await api.get<BooksResponse>(ApiConfig.Endpoints.Books.All)
+    // const booksList = await api.get<BooksResponse>(ApiConfig.Endpoints.Books.All).on("401", () => {
+    //     console.log("Unauthorized");
+    // });
 
     return (
       <div >

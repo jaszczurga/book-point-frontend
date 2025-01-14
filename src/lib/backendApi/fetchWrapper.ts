@@ -32,11 +32,9 @@ class FetchWrapper {
         try {
             const response = await fetch(url, options);
 
-            console.log('request response:', response);
-            console.log(this.token);
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new FetchError(response.status, errorData.message || 'Unknown error');
+                console.log('error response:', response);
+                throw new FetchError(response.status);
             }
 
             return (await response.json()) as T;
@@ -65,7 +63,8 @@ class FetchWrapper {
 
 class FetchError extends Error {
     status: number;
-    constructor(status: number, message: string) {
+    name: string;
+    constructor(status: number, message: string = "No error message provided") {
         super(message);
         this.status = status;
         this.name = 'FetchError';
