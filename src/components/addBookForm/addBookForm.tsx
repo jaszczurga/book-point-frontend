@@ -4,8 +4,11 @@ import { useForm } from "react-hook-form";
 import { FormSchema, IAddBookFormSchema } from "@/components/addBookForm/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {FileDrop} from "@/components/addBookForm/fileDrop";
+import {Session} from "next-auth";
+import {addBook} from "@/actions/addBook";
 
 type Props = Partial<{
+    session: Session;
     title: string;
     description: string;
     author: string;
@@ -14,17 +17,19 @@ type Props = Partial<{
     categories: string[];
 }>;
 
-export const AddBookForm: React.FC<Props> = ({ title, description, author, isbn, imgUrl, categories }) => {
+export const AddBookForm: React.FC<Props> = ({session, title, description, author, isbn, imgUrl, categories }) => {
     const { register,control,handleSubmit,formState: {errors}} = useForm<IAddBookFormSchema>({ resolver: zodResolver(FormSchema) });
 
     const onSubmit =  async (data: IAddBookFormSchema) => {
         console.log("Form data", data);
+        alert("Book added successfully");
+        await addBook(data, session);
     }
 
     return (
         <div className="max-w-lg mx-auto my-10 md:min-w-form-md min-w-form-sm shadow-lg p-8 rounded-lg bg-white border border-gray-200">
             <h2 className="text-2xl font-bold text-colorHeader mb-6 text-center">Add a New Book</h2>
-            <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+            <form className="space-y-6"  onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <label className="block text-sm font-medium text-gray-700">Title</label>
                     <input

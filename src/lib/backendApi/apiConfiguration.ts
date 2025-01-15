@@ -8,7 +8,7 @@ const ApiConfig = {
         },
         Books: {
             All: '/books',
-            Create: '/posts/create',
+            Create: "/books/create",
         },
     },
 };
