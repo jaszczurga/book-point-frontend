@@ -7,7 +7,7 @@ const ApiConfig = {
             Register: '/auth/register',
         },
         Books: {
-            All: '/books',
+            All: '/books?page=0&size=100',
             Create: "/books/create",
         },
     },

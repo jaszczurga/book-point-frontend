@@ -4,12 +4,23 @@ import {Session} from "next-auth";
 import ApiConfig from "@/lib/backendApi/apiConfiguration";
 
 
-export const addBook = async (book: BookRequestDto, session?: Session) => {
+export const addBook = async (book: BookToSave,bookImage: File, session?: Session) => {
     const api = new FetchWrapper(session?.accessToken ?? '');
-    return api.post<BookResponseDto,BookRequestDto>(ApiConfig.Endpoints.Books.Create, book);
+    const formData = new FormData();
+    formData.append("bookData",new Blob([JSON.stringify({
+        title: book.title,
+        description: book.description,
+        author: book.author,
+        isbn: book.isbn,
+        categories: [],
+    })], {
+        type: "application/json"
+    }));
+    formData.append("img", bookImage);
+    return api.postForm<BookResponseDto,FormData>(ApiConfig.Endpoints.Books.Create, formData);
 }
 
-interface BookRequestDto {
+interface BookToSave {
     title: string;
     description: string;
     status?: string;

@@ -23,7 +23,7 @@ export const AddBookForm: React.FC<Props> = ({session, title, description, autho
     const onSubmit =  async (data: IAddBookFormSchema) => {
         console.log("Form data", data);
         alert("Book added successfully");
-        await addBook(data, session);
+        await addBook(data, data.bookImg, session);
     }
 
     return (

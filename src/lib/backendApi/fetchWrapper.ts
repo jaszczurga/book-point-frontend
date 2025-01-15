@@ -14,19 +14,24 @@ class FetchWrapper {
     private async request<T, B = undefined>(
         endpoint: string,
         method: Method,
-        body?: B
+        body?: B,
     ): Promise<T> {
         const url = `${this.baseURL}${endpoint}`;
+        const headers: Record<string,string> = {
+            Authorization: `Bearer ${this.token}`,
+        };
+
+        if(!(body instanceof FormData)) {
+            headers['Content-Type'] = 'application/json';
+        }
+
         const options: RequestInit = {
             method,
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${this.token}`,
-            },
+            headers,
         };
 
         if (body !== undefined) {
-            options.body = JSON.stringify(body);
+            options.body = body instanceof FormData ? body : JSON.stringify(body);
         }
 
         try {
@@ -58,6 +63,10 @@ class FetchWrapper {
 
     async delete<T>(endpoint: string): Promise<T> {
         return this.request<T>(endpoint, 'DELETE');
+    }
+
+    async postForm<T, FormData>(endpoint: string, body: FormData): Promise<T> {
+        return this.request<T, FormData>(endpoint, 'POST', body);
     }
 }
 
