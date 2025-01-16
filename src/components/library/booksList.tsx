@@ -6,6 +6,7 @@ interface Props {
 
 export type Book = {
     title: string;
+    image: File;
 }
 
 export const BooksList: React.FC<Props> = (BookList) => {

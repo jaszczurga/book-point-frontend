@@ -26,6 +26,8 @@ export default {
       minWidth: {
         "form-md": "32rem",
         "form-sm": "24rem",
+        "card-md": "20rem",
+        "card-sm": "16rem",
       }
     },
   },

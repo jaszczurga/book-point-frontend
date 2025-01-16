@@ -1,11 +1,17 @@
 import {auth} from "@/app/api/auth/[...nextauth]/route";
 import FetchWrapper from "@/lib/backendApi/fetchWrapper";
 import ApiConfig from "@/lib/backendApi/apiConfiguration";
+import {BookCard} from "@/components/booksGrid/BookCard";
+import {redirect} from "next/navigation";
 
 
 export default async function Books() {
 
     const session = await auth();
+    if(!session){
+        redirect('/');
+    }
+
     const api = new FetchWrapper(session?.accessToken ?? '');
     const booksList = await api.get<BooksResponse>(ApiConfig.Endpoints.Books.All)
     // const booksList = await api.get<BooksResponse>(ApiConfig.Endpoints.Books.All).on("401", () => {
@@ -15,15 +21,9 @@ export default async function Books() {
     return (
       <div >
             <div className="h-full flex justify-center items-center text-black">
-                <ul>
                     {booksList.content.map(book => (
-                        <li key={book.id}>
-                            <h2>{book.title}</h2>
-                            <p>{book.description}</p>
-                            <img src={book.img} alt={book.title}/>
-                        </li>
+                        <BookCard book={book} key={book.id}/>
                     ))}
-                </ul>
             </div>
       </div>
     );
@@ -34,7 +34,7 @@ interface Link {
     href: string;
 }
 
-interface Book {
+export interface Book {
     id: string;
     title: string;
     description: string;
