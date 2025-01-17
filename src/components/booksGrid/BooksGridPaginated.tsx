@@ -11,7 +11,7 @@ export const BooksGridPaginated = () => {
 
     useEffect(() => {
         const fetchBooks = async () => {
-            const bookResponse = await getBooks(page, 10);
+            const bookResponse = await getBooks(page, 30);
             setBooks(bookResponse.content);
             setTotalPages(bookResponse.page.totalPages);
         }

@@ -20,7 +20,7 @@ export const Pagination: React.FC<Props> = ({page, totalPages, setPage}) => {
             >
                 <ArrowLeft />
             </button>
-            <span className="text-black p-2">{page+1}</span>
+            <span className="text-black p-2">{page+1} ... {totalPages}</span>
             <button
                 disabled={page === totalPages-1}
                 onClick={() => setPage(page + 1)}
