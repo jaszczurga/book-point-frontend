@@ -4,11 +4,11 @@ type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
 class FetchWrapper {
     private baseURL?: string;
-    private token: string;
+    private token: string | null;
 
-    constructor(token: string, baseURL: string = ApiConfig.BaseUrl) {
+    constructor(token?: string, baseURL: string = ApiConfig.BaseUrl) {
         this.baseURL = baseURL;
-        this.token = token;
+        this.token = token ?? null;
     }
 
     private async request<T, B = undefined>(
@@ -17,12 +17,13 @@ class FetchWrapper {
         body?: B,
     ): Promise<T> {
         const url = `${this.baseURL}${endpoint}`;
-        const headers: Record<string,string> = {
-            Authorization: `Bearer ${this.token}`,
-        };
+        const headers: Record<string,string> = {};
 
         if(!(body instanceof FormData)) {
             headers['Content-Type'] = 'application/json';
+        }
+        if(this.token !== null) {
+            headers['Authorization'] = `Bearer ${this.token}`;
         }
 
         const options: RequestInit = {

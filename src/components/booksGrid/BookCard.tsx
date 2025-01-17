@@ -14,8 +14,11 @@ export const BookCard: React.FC<Props> = ({book}) => {
                 <div className={"relative h-[150px] w-full"}>
                     <Image src={book.img} alt={book.title} className="object-cover rounded-sm" fill/>
                 </div>
+                <div className={"flex flex-col items-start"}>
                     <h1 className={"text-md"}>Title: {book.title}</h1>
                     <p className={"text-md"}>Author: {book.author}</p>
+                </div>
+
             </div>
         </Card>
     )

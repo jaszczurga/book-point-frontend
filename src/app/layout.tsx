@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+import
+    type { Metadata } from "next";
 import "./globals.css";
 import {Header} from "@/components/layout/navbar/header";
 import {AuthProvider} from "@/app/providers";
