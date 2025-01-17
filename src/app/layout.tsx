@@ -18,7 +18,9 @@ export default function RootLayout({
         <body className={"bg-pureWhite text-black"}>
         <AuthProvider>
             <Header/>
-            {children}
+            <div className={"md:mx-36 sm:mx-20 mx-8"}>
+                {children}
+            </div>
         </AuthProvider>
         </body>
         </html>
