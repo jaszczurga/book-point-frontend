@@ -3,6 +3,7 @@ import FetchWrapper from "@/lib/backendApi/fetchWrapper";
 import ApiConfig from "@/lib/backendApi/apiConfiguration";
 import {BookCard} from "@/components/booksGrid/BookCard";
 import {redirect} from "next/navigation";
+import {Card} from "@/components/Card";
 
 
 export default async function Books() {
@@ -13,6 +14,7 @@ export default async function Books() {
     }
 
     const api = new FetchWrapper(session?.accessToken ?? '');
+
     const booksList = await api.get<BooksResponse>(ApiConfig.Endpoints.Books.All)
     // const booksList = await api.get<BooksResponse>(ApiConfig.Endpoints.Books.All).on("401", () => {
     //     console.log("Unauthorized");
@@ -20,10 +22,17 @@ export default async function Books() {
 
     return (
       <div >
-            <div className="h-full flex justify-center items-center text-black">
-                    {booksList.content.map(book => (
-                        <BookCard book={book} key={book.id}/>
-                    ))}
+            <div className="h-full flex flex-col mx-36">
+                {/*<div className={" w-full grid grid-cols-5 grid-flow-row"}>*/}
+                {/*    {booksList.content.map(book => (*/}
+                {/*    <BookCard book={book} key={book.id}/>*/}
+                {/*))}*/}
+                {/*</div>*/}
+
+                <Card>
+                    hello
+                </Card>
+
             </div>
       </div>
     );
