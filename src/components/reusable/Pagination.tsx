@@ -1,4 +1,7 @@
 'use client';
+import {ArrowRight} from "@/components/icons/ArrowRight";
+import {ArrowLeft} from "@/components/icons/ArrowLeft";
+
 type Props = {
     page: number;
     totalPages: number;
@@ -9,20 +12,21 @@ type Props = {
 export const Pagination: React.FC<Props> = ({page, totalPages, setPage}) => {
 
     return(
-        <div className="flex justify-center space-x-4">
+        <div className="flex justify-center items-center space-x-4">
             <button
                 disabled={page === 0}
                 onClick={() => setPage(page - 1)}
-                className="bg-green-700 text-white text-xl p-3 rounded-md"
+                className="bg-pureWhite text-colorHeader text-xl p-3 rounded-md"
             >
-                Previous
+                <ArrowLeft />
             </button>
+            <span className="text-black p-2">{page+1}</span>
             <button
                 disabled={page === totalPages-1}
                 onClick={() => setPage(page + 1)}
-                className="bg-green-700 text-white text-xl p-3 rounded-md"
+                className="bg-pureWhite text-colorHeader text-xl p-3 rounded-md"
             >
-                Next
+                <ArrowRight />
             </button>
         </div>
     )

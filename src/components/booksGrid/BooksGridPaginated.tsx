@@ -11,7 +11,7 @@ export const BooksGridPaginated = () => {
 
     useEffect(() => {
         const fetchBooks = async () => {
-            const bookResponse = await getBooks(page, 2);
+            const bookResponse = await getBooks(page, 10);
             setBooks(bookResponse.content);
             setTotalPages(bookResponse.page.totalPages);
         }
@@ -20,11 +20,13 @@ export const BooksGridPaginated = () => {
     , [page]);
 
     return (
+        <div className={"flex flex-col"}>
         <div className={" w-full my-10 grid lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-3 grid-cols-1 gap-4"}>
             {books.map(book => (
                 <BookCard book={book} key={book.id}/>
             ))}
-            <Pagination page={page} totalPages={totalPages} setPage={setPage}/>
         </div>
+         <Pagination page={page} totalPages={totalPages} setPage={setPage}/>
+    </div>
     )
 }
