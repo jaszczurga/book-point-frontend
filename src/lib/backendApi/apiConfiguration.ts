@@ -1,5 +1,5 @@
 const ApiConfig = {
-    BaseUrl: process.env.BACKEND_API_URL || 'http://localhost:3000',
+    BaseUrl:'http://localhost:8080',
     Endpoints: {
         Auth: {
             Validate: '/customers/validate',

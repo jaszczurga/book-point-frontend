@@ -1,17 +1,21 @@
 'use client';
 import {BookCard} from "@/components/booksGrid/BookCard";
 import {useEffect, useState} from "react";
-import {Book, getBooks} from "@/actions/getBooks";
+import {Book, BooksResponse, getBooks} from "@/actions/getBooks";
 import {Pagination} from "@/components/reusable/Pagination";
+import FetchWrapper from "@/lib/backendApi/fetchWrapper";
+import ApiConfig from "@/lib/backendApi/apiConfiguration";
 
 export const BooksGridPaginated = () => {
+    const size = 12;
     const [books, setBooks] = useState<Book[]>([]);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
+    const api = new FetchWrapper();
 
     useEffect(() => {
         const fetchBooks = async () => {
-            const bookResponse = await getBooks(page, 30);
+            const bookResponse = await api.get<BooksResponse>(`${ApiConfig.Endpoints.Books.All}?page=${page}&size=${size}`);
             setBooks(bookResponse.content);
             setTotalPages(bookResponse.page.totalPages);
         }
