@@ -14,9 +14,8 @@ export const FormSchema = z.object({
     // image: z
     //     .string()
     //     .url({ message: "Invalid URL format." }),
-    // category: z
-    //     .string()
-    //     .min(1, { message: "Category is required." }),
+    categories: z
+        .any(),
     bookImg: z
         .any(),
     isbn: z

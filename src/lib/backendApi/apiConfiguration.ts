@@ -10,6 +10,9 @@ const ApiConfig = {
             All: '/books',
             Create: "/books/create",
         },
+        Categories: {
+            All: '/categories',
+        }
     },
 };
 

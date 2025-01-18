@@ -1,11 +1,15 @@
 'use client'
 
-import { useForm } from "react-hook-form";
+import {useFieldArray, useForm} from "react-hook-form";
 import { FormSchema, IAddBookFormSchema } from "@/components/addBookForm/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {FileDrop} from "@/components/addBookForm/fileDrop";
 import {Session} from "next-auth";
 import {addBook} from "@/actions/addBook";
+import {useEffect, useState} from "react";
+import FetchWrapper from "@/lib/backendApi/fetchWrapper";
+import ApiConfig from "@/lib/backendApi/apiConfiguration";
+import {CategoryDropDown} from "@/components/addBookForm/CategoryDropDown";
 
 type Props = Partial<{
     session: Session;
@@ -14,17 +18,31 @@ type Props = Partial<{
     author: string;
     isbn: string;
     imgUrl: string;
-    categories: string[];
 }>;
 
-export const AddBookForm: React.FC<Props> = ({session, title, description, author, isbn, imgUrl, categories }) => {
-    const { register,control,handleSubmit,formState: {errors}} = useForm<IAddBookFormSchema>({ resolver: zodResolver(FormSchema) });
+export interface Category {
+    id: string;
+    name: string;
+    parentId: string;
+}
 
+export const AddBookForm: React.FC<Props> = ({session, title, description, author, isbn, imgUrl }) => {
+    const { register,control,handleSubmit,formState: {errors}} = useForm<IAddBookFormSchema>({ resolver: zodResolver(FormSchema) });
+    const [categories, setCategories] = useState<Category[]>([]);
+    const api = new FetchWrapper();
     const onSubmit =  async (data: IAddBookFormSchema) => {
         console.log("Form data", data);
         alert("Book added successfully");
         await addBook(data, data.bookImg, session);
     }
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const categoriesResponse = await api.get<Category[]>(ApiConfig.Endpoints.Categories.All);
+            setCategories(categoriesResponse);
+        };
+        fetchCategories();
+    }
+    , []);
 
     return (
         <div className="max-w-lg mx-auto my-10 md:min-w-form-md min-w-form-sm shadow-lg p-8 rounded-lg bg-white border border-gray-200">
@@ -86,6 +104,22 @@ export const AddBookForm: React.FC<Props> = ({session, title, description, autho
                     <label className="block text-sm font-medium text-gray-700">Author</label>
                     <FileDrop control={control} name="bookImg"/>
                 </div>
+                {/*<CategoryDropDown category={categories[2]} register={register}/>*/}
+                {
+                    categories.length > 0 && (
+                        <div>
+                            {
+                                categories.map((category) => (
+                                    <div key={category.id}>
+                                        <label
+                                            className="block text-sm font-medium text-gray-700">Category: {category.name}</label>
+                                            <CategoryDropDown category={category} register={register}/>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    )
+                }
                 <button
                     type="submit"
                     className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
