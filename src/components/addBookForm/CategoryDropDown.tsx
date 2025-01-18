@@ -30,7 +30,7 @@ export const CategoryDropDown: React.FC<Props> = ({category, setCategory, regist
 
     return (
         <select
-            {...register("categories")}
+            {...register(`categories.${category.id}`)}
             className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         >
             {subCategories.map((category) => (

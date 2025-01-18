@@ -6,13 +6,18 @@ import ApiConfig from "@/lib/backendApi/apiConfiguration";
 
 export const addBook = async (book: BookToSave,bookImage: File, session?: Session) => {
     const api = new FetchWrapper(session?.accessToken ?? '');
+
+    const listOfCategories = Object.values(book.categories || {})
+        .map(value => value.trim())
+        .filter(value => value !== '');
+
     const formData = new FormData();
     formData.append("bookData",new Blob([JSON.stringify({
         title: book.title,
         description: book.description,
         author: book.author,
         isbn: book.isbn,
-        categories: [],
+        categories: listOfCategories,
     })], {
         type: "application/json"
     }));
@@ -26,7 +31,7 @@ interface BookToSave {
     status?: string;
     author: string;
     isbn: string;
-    categories?: string[];
+    categories?: String[];
 }
 
 interface BookResponseDto {
