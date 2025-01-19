@@ -6,6 +6,7 @@ import {Pagination} from "@/components/reusable/Pagination";
 import FetchWrapper from "@/lib/backendApi/fetchWrapper";
 import ApiConfig from "@/lib/backendApi/apiConfiguration";
 import {Filter} from "@/components/booksGrid/Filter/Filter";
+import {FilterList} from "@/components/booksGrid/Filter/FilterList";
 
 export const BooksGridPaginated = () => {
     const size = 12;
@@ -42,7 +43,9 @@ export const BooksGridPaginated = () => {
                         <BookCard book={book} key={book.id}/>
                     ))}
                 </div>
-                <Filter/>
+                <FilterList>
+                    <Filter categories={["polish","english"]}/>
+                </FilterList>
             </div>
             <Pagination page={page} totalPages={totalPages} setPage={setPage}/>
         </div>
