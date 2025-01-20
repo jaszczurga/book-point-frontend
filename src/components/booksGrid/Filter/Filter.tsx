@@ -1,13 +1,26 @@
 'use client'
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {ArrowDown} from "@/components/icons/ArrowDown";
 import {ArrowUp} from "@/components/icons/ArrowUp";
+import {Category} from "@/components/addBookForm/addBookForm";
+import FetchWrapper from "@/lib/backendApi/fetchWrapper";
 
 type Props = {
-    categories: string[];
+    category: Category;
 }
 
-export const Filter: React.FC<Props> = ({categories}) => {
+export const Filter: React.FC<Props> = ({category}) => {
+
+    const [subCategories, setSubCategories] = useState<Category[]>([]);
+    const api = new FetchWrapper();
+
+    useEffect(() => {
+        const fetchSubCategories = async () => {
+            const subCategoriesResponse = await api.get<Category[]>(`/categories/${category.id}/subcategories`);
+            setSubCategories(subCategoriesResponse);
+        };
+        fetchSubCategories();
+    }, []);
 
    const [open, setOpen] = useState(false);
 
@@ -19,7 +32,7 @@ export const Filter: React.FC<Props> = ({categories}) => {
                 className="text-colorHeader bg-pureWhite font-medium text-sm px-4 py-2.5 text-center inline-flex items-center justify-between w-full cursor-pointer"
                 onClick={() => setOpen(!open)}
             >
-                Filter by category
+                {category.name}
                 {open ? <ArrowUp /> : <ArrowDown />}
             </div>
             <div
@@ -29,8 +42,8 @@ export const Filter: React.FC<Props> = ({categories}) => {
             >
                 <ul className="space-y-2 text-sm" aria-labelledby="dropdownDefault">
                     {
-                        categories.map((category) => (
-                            <li className="flex items-center">
+                        subCategories.map((category) => (
+                            <li key={category.id} className="flex items-center">
                                 <input
                                     type="checkbox"
                                     value=""
@@ -39,7 +52,7 @@ export const Filter: React.FC<Props> = ({categories}) => {
                                 <label
                                     className="ml-2 text-sm font-medium"
                                 >
-                                    {category}
+                                    {category.name}
                                 </label>
                             </li>
                         ))

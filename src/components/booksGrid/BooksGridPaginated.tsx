@@ -7,10 +7,12 @@ import FetchWrapper from "@/lib/backendApi/fetchWrapper";
 import ApiConfig from "@/lib/backendApi/apiConfiguration";
 import {Filter} from "@/components/booksGrid/Filter/Filter";
 import {FilterList} from "@/components/booksGrid/Filter/FilterList";
+import {Category} from "@/components/addBookForm/addBookForm";
 
 export const BooksGridPaginated = () => {
     const size = 12;
     const [books, setBooks] = useState<Book[]>([]);
+    const [categories, setCategories] = useState<Category[]>([]);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const api = new FetchWrapper();
@@ -24,6 +26,15 @@ export const BooksGridPaginated = () => {
         fetchBooks();
     }
     , [page]);
+
+    useEffect(() => {
+            const fetchCategories = async () => {
+                const categoriesResponse = await api.get<Category[]>(ApiConfig.Endpoints.Categories.All);
+                setCategories(categoriesResponse);
+            };
+            fetchCategories();
+        }
+        , []);
 
     const filterPaams = {
         author: "",
@@ -44,7 +55,11 @@ export const BooksGridPaginated = () => {
                     ))}
                 </div>
                 <FilterList className={"w-[30%]"}>
-                    <Filter categories={["polish","english"]}/>
+                    {
+                        categories.map((category) => (
+                            <Filter key={category.id} category={category}/>
+                        ))
+                    }
                 </FilterList>
             </div>
             <Pagination page={page} totalPages={totalPages} setPage={setPage}/>
