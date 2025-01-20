@@ -2,25 +2,14 @@
 import {useEffect, useState} from "react";
 import {ArrowDown} from "@/components/icons/ArrowDown";
 import {ArrowUp} from "@/components/icons/ArrowUp";
-import {Category} from "@/components/addBookForm/addBookForm";
+import {Category, CategoryFull} from "@/components/addBookForm/addBookForm";
 import FetchWrapper from "@/lib/backendApi/fetchWrapper";
 
 type Props = {
-    category: Category;
+    category: CategoryFull;
 }
 
 export const Filter: React.FC<Props> = ({category}) => {
-
-    const [subCategories, setSubCategories] = useState<Category[]>([]);
-    const api = new FetchWrapper();
-
-    useEffect(() => {
-        const fetchSubCategories = async () => {
-            const subCategoriesResponse = await api.get<Category[]>(`/categories/${category.id}/subcategories`);
-            setSubCategories(subCategoriesResponse);
-        };
-        fetchSubCategories();
-    }, []);
 
    const [open, setOpen] = useState(false);
 
@@ -42,7 +31,7 @@ export const Filter: React.FC<Props> = ({category}) => {
             >
                 <ul className="space-y-2 text-sm" aria-labelledby="dropdownDefault">
                     {
-                        subCategories.map((category) => (
+                        category.children.map((category) => (
                             <li key={category.id} className="flex items-center">
                                 <input
                                     type="checkbox"

@@ -26,6 +26,13 @@ export interface Category {
     parentId: string;
 }
 
+export interface CategoryFull {
+    id: string;
+    name: string;
+    parentId: string;
+    children: Category[];
+}
+
 export const AddBookForm: React.FC<Props> = ({session, title, description, author, isbn, imgUrl }) => {
     const { register,control,handleSubmit,formState: {errors}} = useForm<IAddBookFormSchema>({ resolver: zodResolver(FormSchema) });
     const [categories, setCategories] = useState<Category[]>([]);

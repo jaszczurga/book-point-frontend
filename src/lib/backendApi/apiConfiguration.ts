@@ -12,6 +12,7 @@ const ApiConfig = {
         },
         Categories: {
             All: '/categories',
+            AllFull: '/categories/full',
         }
     },
 };
