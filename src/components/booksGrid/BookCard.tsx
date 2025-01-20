@@ -1,6 +1,6 @@
-import {Book} from "@/app/library/page";
 import Image from "next/image";
 import {Card} from "@/components/reusable/Card";
+import {Book} from "@/actions/getBooks";
 
 
 type Props = {

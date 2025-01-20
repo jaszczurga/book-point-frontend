@@ -28,18 +28,22 @@ export const Filter: React.FC<Props> = ({categories}) => {
                 }`}
             >
                 <ul className="space-y-2 text-sm" aria-labelledby="dropdownDefault">
-                    <li className="flex items-center">
-                        <input
-                            type="checkbox"
-                            value=""
-                            className="w-4 h-4 bg-pureWhite text-colorHeader "
-                        />
-                        <label
-                            className="ml-2 text-sm font-medium"
-                        >
-                            Razor (49)
-                        </label>
-                    </li>
+                    {
+                        categories.map((category) => (
+                            <li className="flex items-center">
+                                <input
+                                    type="checkbox"
+                                    value=""
+                                    className="w-4 h-4 mx-2 bg-pureWhite text-colorHeader "
+                                />
+                                <label
+                                    className="ml-2 text-sm font-medium"
+                                >
+                                    {category}
+                                </label>
+                            </li>
+                        ))
+                    }
                 </ul>
             </div>
         </div>

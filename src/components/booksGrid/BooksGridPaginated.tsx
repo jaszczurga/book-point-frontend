@@ -43,7 +43,7 @@ export const BooksGridPaginated = () => {
                         <BookCard book={book} key={book.id}/>
                     ))}
                 </div>
-                <FilterList>
+                <FilterList className={"w-[30%]"}>
                     <Filter categories={["polish","english"]}/>
                 </FilterList>
             </div>
