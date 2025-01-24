@@ -32,8 +32,6 @@ export const BooksGridPaginated = () => {
         console.log(categoriesFilter);
     };
 
-
-
     useEffect(() => {
             const url = URLBuilder
                 .builder
@@ -68,13 +66,27 @@ export const BooksGridPaginated = () => {
             <div className={"w-full h-full flex justify-center bg-blue-900"}>
                 <Search setSearchQuery={setSearchQuery} className={"p-3 w-[60%] my-5"}/>
             </div>
-            <div className={"flex flex-row items-start md:mx-36 sm:mx-20 mx-8 mt-10 mb-5"}>
+            {
+                categoriesFilter.length > 0 && (
+                    <div className={"flex flex-wrap justify-center items-center mt-5 gap-3"}>
+                        {categoriesFilter.map((category) => (
+                            <div
+                                key={category}
+                                className={"bg-blue-100 border border-blue-300 text-blue-500 px-4 py-2 rounded-md shadow-md"}
+                            >
+                                <p className={"text-sm"}>{category}</p>
+                            </div>
+                        ))}
+                    </div>
+                )
+            }
+            <div className={"flex md:flex-row flex-col-reverse items-start md:mx-36 sm:mx-20 mx-8 mt-5 mb-5"}>
                 <div className={" w-full grid lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-3 grid-cols-1 gap-4"}>
                     {books.map(book => (
                         <BookCard book={book} key={book.id}/>
                     ))}
                 </div>
-                <FilterList className={"w-[30%]"}>
+                <FilterList className={"md:w-[30%] w-full"}>
                     {
                         categories.map((category) => (
                             <Filter key={category.id} category={category} toggleCategory={toggleCategoryFilter}/>
