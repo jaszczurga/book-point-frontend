@@ -13,7 +13,10 @@ const ApiConfig = {
         Categories: {
             All: '/categories',
             AllFull: '/categories/full',
-        }
+        },
+        GoogleBooks: {
+            Search: '/api/v1/books/google',
+        },
     },
 };
 

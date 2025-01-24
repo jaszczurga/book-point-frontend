@@ -52,8 +52,6 @@ export const AddBookForm: React.FC<Props> = ({session, title, description, autho
     , []);
 
     return (
-        <div className="max-w-lg mx-auto my-10 md:min-w-form-md min-w-form-sm shadow-lg p-8 rounded-lg bg-white border border-gray-200">
-            <h2 className="text-2xl font-bold text-colorHeader mb-6 text-center">Add a New Book</h2>
             <form className="space-y-6"  onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <label className="block text-sm font-medium text-gray-700">Title</label>
@@ -134,6 +132,5 @@ export const AddBookForm: React.FC<Props> = ({session, title, description, autho
                     Submit
                 </button>
             </form>
-        </div>
     )
 }

@@ -20,6 +20,18 @@ const nextConfig: NextConfig = {
                 port: '4566',
                 pathname: '/**',
             },
+            {
+                protocol: "https",
+                hostname: "books.google.com", // Specifically allow books.google.com
+                port: "",
+                pathname: "/**",
+            },
+            {
+                protocol: "http",
+                hostname: "books.google.com", // Specifically allow books.google.com
+                port: "",
+                pathname: "/**",
+            },
         ],
     },
 };

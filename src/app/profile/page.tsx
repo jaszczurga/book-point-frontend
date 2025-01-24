@@ -1,6 +1,7 @@
 import {AddBookForm} from "@/components/addBookForm/addBookForm";
 import {auth} from "@/app/api/auth/[...nextauth]/route";
 import {redirect} from "next/navigation";
+import {AddBookSection} from "@/components/addBookForm/AddBookSection";
 
 export default async function Account() {
     const session = await auth();
@@ -10,7 +11,7 @@ export default async function Account() {
 
   return (
     <div className="h-full flex justify-center">
-        <AddBookForm session={session}/>
+        <AddBookSection session={session}/>
     </div>
   );
 }
