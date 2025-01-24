@@ -64,7 +64,7 @@ export const BooksGridPaginated = () => {
     return (
         <div className={"flex flex-col mb-10"}>
             <div className={"w-full h-full flex justify-center bg-blue-900"}>
-                <Search setSearchQuery={setSearchQuery} className={"p-3 w-[60%] my-5"}/>
+                <Search setSearchQuery={setSearchQuery} className={"p-3 md:w-[60%] w-[80%] my-5"} placeholder={"Search by: title, author, isbn"}/>
             </div>
             {
                 categoriesFilter.length > 0 && (
