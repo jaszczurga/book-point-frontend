@@ -20,9 +20,7 @@ export default function RootLayout({
         <body className={"bg-pureWhite text-black"}>
         <AuthProvider>
             <Header/>
-            <div className={"md:mx-36 sm:mx-20 mx-8 my-10"}>
                 {children}
-            </div>
             <Footer/>
         </AuthProvider>
         </body>

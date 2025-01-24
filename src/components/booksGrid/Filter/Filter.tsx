@@ -7,9 +7,10 @@ import FetchWrapper from "@/lib/backendApi/fetchWrapper";
 
 type Props = {
     category: CategoryFull;
+    toggleCategory: (categoryName: string) => void;
 }
 
-export const Filter: React.FC<Props> = ({category}) => {
+export const Filter: React.FC<Props> = ({category, toggleCategory}) => {
 
    const [open, setOpen] = useState(false);
 
@@ -37,6 +38,7 @@ export const Filter: React.FC<Props> = ({category}) => {
                                     type="checkbox"
                                     value=""
                                     className="w-4 h-4 mx-2 bg-pureWhite text-colorHeader "
+                                    onChange={() => toggleCategory(category.name)}
                                 />
                                 <label
                                     className="ml-2 text-sm font-medium"

@@ -1,13 +1,15 @@
 'use client';
 import {BookCard} from "@/components/booksGrid/BookCard";
 import {useEffect, useState} from "react";
-import {Book, BooksResponse, getBooks} from "@/actions/getBooks";
+import {Book, BooksResponse} from "@/actions/getBooks";
 import {Pagination} from "@/components/reusable/Pagination";
 import FetchWrapper from "@/lib/backendApi/fetchWrapper";
 import ApiConfig from "@/lib/backendApi/apiConfiguration";
 import {Filter} from "@/components/booksGrid/Filter/Filter";
 import {FilterList} from "@/components/booksGrid/Filter/FilterList";
 import { CategoryFull} from "@/components/addBookForm/addBookForm";
+import {ParamValue, URLBuilder} from "@/lib/backendApi/URLBuilder";
+import {Search} from "@/components/reusable/Search";
 
 export const BooksGridPaginated = () => {
     const size = 12;
@@ -15,17 +17,42 @@ export const BooksGridPaginated = () => {
     const [categories, setCategories] = useState<CategoryFull[]>([]);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
+    const [searchQuery, setSearchQuery] = useState<string>('');
+    const [categoriesFilter, setCategoriesFilter] = useState<string[]>([]);
+
     const api = new FetchWrapper();
 
+
+    const toggleCategoryFilter = (categoryName: string) => {
+        setCategoriesFilter((prev) =>
+            prev.includes(categoryName)
+                ? prev.filter((category) => category !== categoryName)
+                : [...prev, categoryName]
+        );
+        console.log(categoriesFilter);
+    };
+
+
+
     useEffect(() => {
+            const url = URLBuilder
+                .builder
+                .setBaseUrl(ApiConfig.Endpoints.Books.All)
+                .addParam('page', page)
+                .addParam('size', size)
+                .addParam('categories', categoriesFilter)
+                .addParam('searchQuery', searchQuery)
+                .toString();
+            console.log(url);
+
         const fetchBooks = async () => {
-            const bookResponse = await api.get<BooksResponse>(`${ApiConfig.Endpoints.Books.All}?page=${page}&size=${size}`);
+            const bookResponse = await api.get<BooksResponse>(url);
             setBooks(bookResponse.content);
             setTotalPages(bookResponse.page.totalPages);
         }
         fetchBooks();
     }
-    , [page]);
+    , [page,categoriesFilter,searchQuery]);
 
     useEffect(() => {
             const fetchCategories = async () => {
@@ -36,19 +63,12 @@ export const BooksGridPaginated = () => {
         }
         , []);
 
-    const filterPaams = {
-        author: "",
-        status: "",
-        title: "",
-        isbn: "",
-        categories: [],
-        page: 0,
-        size: 12
-    }
-
     return (
-        <div className={"flex flex-col"}>
-            <div className={"flex flex-row items-start"}>
+        <div className={"flex flex-col mb-10"}>
+            <div className={"w-full h-full flex justify-center bg-blue-900"}>
+                <Search setSearchQuery={setSearchQuery} className={"p-3 w-[60%] my-5"}/>
+            </div>
+            <div className={"flex flex-row items-start md:mx-36 sm:mx-20 mx-8 mt-10 mb-5"}>
                 <div className={" w-full grid lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-3 grid-cols-1 gap-4"}>
                     {books.map(book => (
                         <BookCard book={book} key={book.id}/>
@@ -57,7 +77,7 @@ export const BooksGridPaginated = () => {
                 <FilterList className={"w-[30%]"}>
                     {
                         categories.map((category) => (
-                            <Filter key={category.id} category={category}/>
+                            <Filter key={category.id} category={category} toggleCategory={toggleCategoryFilter}/>
                         ))
                     }
                 </FilterList>
