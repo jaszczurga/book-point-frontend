@@ -35,7 +35,8 @@ export interface CategoryFull {
 }
 
 export const AddBookForm: React.FC<Props> = ({session, title, description, author, isbn, imgUrl }) => {
-    const { register,control,handleSubmit,setValue ,formState: {errors}} = useForm<IAddBookFormSchema>({ resolver: zodResolver(FormSchema), defaultValues: {bookImg: null} });
+    const { register,control,handleSubmit,setValue, reset ,formState: {errors}} = useForm<IAddBookFormSchema>({ resolver: zodResolver(FormSchema),
+    });
     const [categories, setCategories] = useState<Category[]>([]);
     const api = new FetchWrapper();
     const onSubmit =  async (data: IAddBookFormSchema) => {
@@ -43,11 +44,27 @@ export const AddBookForm: React.FC<Props> = ({session, title, description, autho
         alert("Book added successfully");
         await addBook(data, data.bookImg, session);
     }
+
+    useEffect(() => {
+        if (title || description || author || isbn) {
+            reset({
+                title: title || "",
+                description: description || "",
+                author: author || "",
+                isbn: isbn || "",
+                bookImg: null,
+            });
+        }
+    }, [title, description, author, isbn, reset]);
+
     useEffect(() => {
         const fetchImg = async () => {
             if (imgUrl) {
-                 const file = await fetchGoogleBook(imgUrl)
-                setValue("bookImg", file);
+                 const fileBlob = await fetchGoogleBook(imgUrl)
+                if(fileBlob) {
+                    const file = new File([fileBlob], `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`, { type: fileBlob.type });
+                    setValue("bookImg", file);
+                }
             }
         }
         const fetchCategories = async () => {
