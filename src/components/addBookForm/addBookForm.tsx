@@ -10,6 +10,7 @@ import {useEffect, useState} from "react";
 import FetchWrapper from "@/lib/backendApi/fetchWrapper";
 import ApiConfig from "@/lib/backendApi/apiConfiguration";
 import {CategoryDropDown} from "@/components/addBookForm/CategoryDropDown";
+import {fetchGoogleBook} from "@/actions/fetchGoogleBook";
 
 type Props = Partial<{
     session: Session;
@@ -17,7 +18,7 @@ type Props = Partial<{
     description: string;
     author: string;
     isbn: string;
-    imgUrl: string;
+    imgUrl: string | null;
 }>;
 
 export interface Category {
@@ -34,7 +35,7 @@ export interface CategoryFull {
 }
 
 export const AddBookForm: React.FC<Props> = ({session, title, description, author, isbn, imgUrl }) => {
-    const { register,control,handleSubmit,formState: {errors}} = useForm<IAddBookFormSchema>({ resolver: zodResolver(FormSchema) });
+    const { register,control,handleSubmit,setValue ,formState: {errors}} = useForm<IAddBookFormSchema>({ resolver: zodResolver(FormSchema), defaultValues: {bookImg: null} });
     const [categories, setCategories] = useState<Category[]>([]);
     const api = new FetchWrapper();
     const onSubmit =  async (data: IAddBookFormSchema) => {
@@ -43,13 +44,20 @@ export const AddBookForm: React.FC<Props> = ({session, title, description, autho
         await addBook(data, data.bookImg, session);
     }
     useEffect(() => {
+        const fetchImg = async () => {
+            if (imgUrl) {
+                 const file = await fetchGoogleBook(imgUrl)
+                setValue("bookImg", file);
+            }
+        }
         const fetchCategories = async () => {
             const categoriesResponse = await api.get<Category[]>(ApiConfig.Endpoints.Categories.All);
             setCategories(categoriesResponse);
         };
         fetchCategories();
+        fetchImg();
     }
-    , []);
+    , [imgUrl]);
 
     return (
             <form className="space-y-6"  onSubmit={handleSubmit(onSubmit)}>

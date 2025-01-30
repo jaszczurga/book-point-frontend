@@ -26,7 +26,7 @@ export const AddBookSection: React.FC<Props> = ({session}) => {
             >
                 <LogoIcon className={"text-pureWhite"} />
             </div>
-            <AddBookForm session={session} title={book?.title} description={book?.description} author={book?.authors?.toString()} isbn={book?.isbn}/>
+            <AddBookForm session={session} title={book?.title} description={book?.description} author={book?.authors?.toString()} isbn={book?.isbn} imgUrl={book?.img}/>
         </div>
         </>
     )

@@ -8,8 +8,7 @@ export const FormSchema = z.object({
         .max(100, { message: "Title must be less than 100 characters." }),
     description: z
         .string()
-        .min(1, { message: "Description is required." })
-        .max(200, { message: "Description must be less than 200 characters." }),
+        .min(1, { message: "Description is required." }),
     //todo
     // image: z
     //     .string()
