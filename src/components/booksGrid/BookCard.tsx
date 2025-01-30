@@ -8,6 +8,8 @@ type Props = {
 }
 
 export const BookCard: React.FC<Props> = ({book}) => {
+
+
     return (
         <Card>
             <div className="flex flex-col items-center w-full">

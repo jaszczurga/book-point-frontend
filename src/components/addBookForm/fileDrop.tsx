@@ -3,7 +3,13 @@ import { Control, Controller } from 'react-hook-form';
 import Dropzone from 'react-dropzone';
 import {IAddBookFormSchema} from "@/components/addBookForm/zod";
 
-export const FileDrop = ({ control, name }: { control:  Control<IAddBookFormSchema, any>, name: any }) => {
+
+type Props = {
+    control: Control<IAddBookFormSchema, any>;
+    name: any;
+}
+
+export const FileDrop: React.FC<Props> = ({ control, name }) => {
     return (
         <Controller
             control={control}

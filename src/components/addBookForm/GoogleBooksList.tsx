@@ -4,40 +4,41 @@ import { Search } from "@/components/reusable/Search";
 import { URLBuilder } from "@/lib/backendApi/URLBuilder";
 import ApiConfig from "@/lib/backendApi/apiConfiguration";
 import FetchWrapper from "@/lib/backendApi/fetchWrapper";
+import {GoogleBookCard} from "@/components/addBookForm/GoogleBookCard";
 
 type Props = {
     handleClose: (book: any) => void;
     setBook: (book: any) => void;
 };
 
+
 export const GoogleBooksList: React.FC<Props> = ({ handleClose,setBook }) => {
-    const [searchTerm, setSearchTerm] = useState("");
+    const [searchTerm, setSearchTerm] = useState("Java");
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [books, setBooks] = useState<Book[]>([]);
+    const [books, setBooks] = useState<GoogleBook[]>([]);
     const api = new FetchWrapper();
+
+    const fetchBooks = async () => {
+        try {
+            const url = URLBuilder.builder
+                .setBaseUrl(ApiConfig.Endpoints.GoogleBooks.Search)
+                .addParam("title", searchTerm)
+                .toString();
+            const bookResponse = await api.get<GoogleBook[]>(url);
+            setBooks(bookResponse || []);
+        } catch (error) {
+            console.error("Failed to fetch books:", error);
+            setBooks([]);
+        }
+    };
 
     useEffect(() => {
         if (!searchTerm) {
             setBooks([]);
             return;
         }
-
-        const fetchBooks = async () => {
-            try {
-                const url = URLBuilder.builder
-                    .setBaseUrl(ApiConfig.Endpoints.GoogleBooks.Search)
-                    .addParam("title", searchTerm)
-                    .toString();
-                const bookResponse = await api.get<Book[]>(url);
-                setBooks(bookResponse || []);
-            } catch (error) {
-                console.error("Failed to fetch books:", error);
-                setBooks([]);
-            }
-        };
-
         fetchBooks();
-    }, [searchTerm]);
+    }, []);
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
@@ -51,6 +52,11 @@ export const GoogleBooksList: React.FC<Props> = ({ handleClose,setBook }) => {
         setCurrentImageIndex((prevIndex) => (prevIndex === books.length - 1 ? 0 : prevIndex + 1));
     };
 
+    const handleChooseBook = () => {
+        setBook(books[currentImageIndex]);
+        handleClose(books[currentImageIndex]);
+    }
+
     return (
         <div
             className="h-full fixed bg-black bg-opacity-40 w-full start-0 top-0 z-10"
@@ -61,14 +67,14 @@ export const GoogleBooksList: React.FC<Props> = ({ handleClose,setBook }) => {
                     className="h-auto w-[600px] z-11 bg-colorHeader p-6 rounded-lg"
                     onClick={(e) => e.stopPropagation()} // Prevent closing on inner div click
                 >
-                    <Search setSearchQuery={setSearchTerm} />
+                    <Search setSearchQuery={setSearchTerm} search={fetchBooks} />
 
                     {/* Image Slider */}
                     <div className="flex flex-col items-center">
                         {books.length > 0 ? (
                             <>
-                                <div className="relative h-[300px] w-[70%] mt-10">
-                                    <BookCard book={books[currentImageIndex]} />
+                                <div className="relative h-[280px] w-[60%] mt-10" onClick={handleChooseBook}>
+                                    <GoogleBookCard book={books[currentImageIndex]} />
                                 </div>
                                 <div className="flex justify-between w-full mt-4">
                                     <button
@@ -97,16 +103,19 @@ export const GoogleBooksList: React.FC<Props> = ({ handleClose,setBook }) => {
     );
 };
 
+
+
+
 interface Link {
     rel: string;
     href: string;
 }
 
-interface Book {
+export interface GoogleBook {
     title: string;
-    description: string | null;
+    description: string;
     img: string | null;
-    authors: string[];
+    authors: string[] | null;
     isbn: string;
     googleBookId: string;
     publishedDate: string;
