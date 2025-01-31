@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { borrowBook } from "@/actions/borrowBook";
 import { BooksStatus } from "@/lib/utils/BooksStatus";
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 
 type Props = {
     book: Book;
@@ -14,15 +15,18 @@ type Props = {
 export const BookCard: React.FC<Props> = ({ book }) => {
     const { data: session } = useSession();
 
-    // Maintain local state for book status
     const [bookStatus, setBookStatus] = useState(book.status);
 
     const borrowHateos = book.links.find((link) => link.rel === "borrowBook");
 
     const handleBorrow = async () => {
+        if(!session){
+            await signIn("keycloak");
+            return;
+        }
         if (borrowHateos) {
             await borrowBook(borrowHateos.href, session ?? undefined);
-            setBookStatus(BooksStatus.BORROWED); // Update state to trigger re-render
+            setBookStatus(BooksStatus.BORROWED);
         }
     };
 
