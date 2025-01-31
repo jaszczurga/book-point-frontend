@@ -10,6 +10,8 @@ import {FilterList} from "@/components/booksGrid/Filter/FilterList";
 import { CategoryFull} from "@/components/addBookForm/addBookForm";
 import {ParamValue, URLBuilder} from "@/lib/backendApi/URLBuilder";
 import {Search} from "@/components/reusable/Search";
+import {redirect} from "next/navigation";
+import Link from "next/link";
 
 export const BooksGridPaginated = () => {
     const size = 12;
@@ -83,7 +85,9 @@ export const BooksGridPaginated = () => {
             <div className={"flex md:flex-row flex-col-reverse items-start md:mx-36 sm:mx-20 mx-8 mt-5 mb-5"}>
                 <div className={" w-full grid lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-3 grid-cols-1 gap-4"}>
                     {books.map(book => (
+                        <Link key={book.id} href={`/library/${book.id}`}>
                         <BookCard book={book} key={book.id}/>
+                        </Link>
                     ))}
                 </div>
                 <FilterList className={"md:w-[30%] w-full"}>

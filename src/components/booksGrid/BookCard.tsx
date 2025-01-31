@@ -3,6 +3,7 @@ import { Card } from "@/components/reusable/Card";
 import { Book } from "@/actions/getBooks";
 import {auth} from "@/app/api/auth/[...nextauth]/route";
 import {BooksStatus} from "@/lib/utils/BooksStatus";
+import Link from "next/link";
 
 type Props = {
     book: Book;
@@ -12,7 +13,7 @@ export const BookCard: React.FC<Props> =({ book }) => {
 
     return (
         <Card>
-            <div className="flex flex-col items-center w-full">
+            <div className="flex flex-col items-center w-full" >
                 <div className={"relative h-[150px] w-full"}>
                     <Image src={book.img} alt={book.title} className="object-cover rounded-sm" fill />
                 </div>
