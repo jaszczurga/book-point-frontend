@@ -1,34 +1,14 @@
-"use client";
 import Image from "next/image";
 import { Card } from "@/components/reusable/Card";
 import { Book } from "@/actions/getBooks";
-import { useSession } from "next-auth/react";
-import { borrowBook } from "@/actions/borrowBook";
-import { BooksStatus } from "@/lib/utils/BooksStatus";
-import { useState } from "react";
-import { signIn } from "next-auth/react";
+import {auth} from "@/app/api/auth/[...nextauth]/route";
+import {BooksStatus} from "@/lib/utils/BooksStatus";
 
 type Props = {
     book: Book;
 };
 
-export const BookCard: React.FC<Props> = ({ book }) => {
-    const { data: session } = useSession();
-
-    const [bookStatus, setBookStatus] = useState(book.status);
-
-    const borrowHateos = book.links.find((link) => link.rel === "borrowBook");
-
-    const handleBorrow = async () => {
-        if(!session){
-            await signIn("keycloak");
-            return;
-        }
-        if (borrowHateos) {
-            await borrowBook(borrowHateos.href, session ?? undefined);
-            setBookStatus(BooksStatus.BORROWED);
-        }
-    };
+export const BookCard: React.FC<Props> =({ book }) => {
 
     return (
         <Card>
@@ -39,18 +19,14 @@ export const BookCard: React.FC<Props> = ({ book }) => {
                 <div className={"flex flex-col items-start"}>
                     <h1 className={"text-md"}>Title: {book.title}</h1>
                     <p className={"text-md"}>Author: {book.author}</p>
-                    <p>Status: {bookStatus}</p>
+                    {
+                        book.status === BooksStatus.AVAILABLE ? (
+                            <p className={"text-blue-500 p-1 rounded-md"}>Borrow</p>
+                        ) : (
+                            <p className={" text-red-500 p-1 rounded-md"}>Unavailable</p>
+                        )
+                    }
                 </div>
-                {bookStatus === "AVAILABLE" && (
-                    <button className={"bg-blue-500 text-white p-2 rounded-md"} onClick={handleBorrow}>
-                        Borrow
-                    </button>
-                )}
-                {bookStatus === "BORROWED" && (
-                    <button className={"bg-red-500 text-white p-2 rounded-md"} disabled>
-                        unavailable
-                    </button>
-                )}
             </div>
         </Card>
     );
