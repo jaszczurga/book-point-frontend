@@ -7,12 +7,12 @@ import FetchWrapper from "@/lib/backendApi/fetchWrapper";
 import ApiConfig from "@/lib/backendApi/apiConfiguration";
 import {Filter} from "@/components/booksGrid/Filter/Filter";
 import {FilterList} from "@/components/booksGrid/Filter/FilterList";
-import { CategoryFull} from "@/components/addBookForm/addBookForm";
-import {ParamValue, URLBuilder} from "@/lib/backendApi/URLBuilder";
+import {CategoryFull} from "@/components/addBookForm/addBookForm";
+import {URLBuilder} from "@/lib/backendApi/URLBuilder";
 import {Search} from "@/components/reusable/Search";
-import {redirect, useSearchParams} from "next/navigation";
+import {useSearchParams} from "next/navigation";
 import Link from "next/link";
-import {useRouter} from "next/router";
+
 
 export const BooksGridPaginated = () => {
     const size = 12;
@@ -22,6 +22,7 @@ export const BooksGridPaginated = () => {
     const [totalPages, setTotalPages] = useState(0);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [categoriesFilter, setCategoriesFilter] = useState<string[]>([]);
+    const [onlyAvailable, setOnlyAvailable] = useState<boolean>(false);
     const searchParams = useSearchParams();
 
     const api = new FetchWrapper();
@@ -48,12 +49,16 @@ export const BooksGridPaginated = () => {
         if(searchParams.has('q')){
             setSearchQuery(searchParams.get('q') as string);
         }
+        if(searchParams.has('available')){
+            setOnlyAvailable(searchParams.get('available') === 'true');
+        }
 
             const url = URLBuilder
                 .builder
                 .setBaseUrl(ApiConfig.Endpoints.Books.All)
                 .addParam('page', page)
                 .addParam('size', size)
+                .addParam('status', onlyAvailable ? 'available' : '')
                 .addParam('categories', categoriesFilter)
                 .addParam('searchQuery', searchQuery)
                 .toString();
@@ -66,7 +71,7 @@ export const BooksGridPaginated = () => {
         }
         fetchBooks();
     }
-    , [page,categoriesFilter,searchQuery]);
+    , [page,categoriesFilter,searchQuery,onlyAvailable]);
 
     useEffect(() => {
             const fetchCategories = async () => {
@@ -115,6 +120,16 @@ export const BooksGridPaginated = () => {
                             <Filter key={category.id} category={category} toggleCategory={toggleCategoryFilter}/>
                         ))
                     }
+                    <div className="flex items-center justify-start mx-4 my-2">
+                        <input
+                            type="checkbox"
+                            id="onlyAvailable"
+                            checked={onlyAvailable}
+                            onChange={() => setOnlyAvailable(prev => !prev)}
+                            className="mr-2 w-4 h-4"
+                        />
+                        <label htmlFor="onlyAvailable" className="text-colorHeader text-sm">Show only available books</label>
+                    </div>
                 </FilterList>
             </div>
             <Pagination page={page} totalPages={totalPages} setPage={setPage}/>
