@@ -17,14 +17,15 @@ export const BookCard: React.FC<Props> =({ book }) => {
                 <div className={"relative h-[150px] w-full"}>
                     <Image src={book.img} alt={book.title} className="object-cover rounded-sm" fill />
                 </div>
-                <div className={"flex flex-col items-start"}>
-                    <h1 className={"text-md"}>Title: {book.title}</h1>
-                    <p className={"text-md"}>Author: {book.author}</p>
+                <div className={"flex flex-col text-sm p-2 w-full h-32"}>
+                    <h1>Title: {book.title}</h1>
+                    <p>Author: {book.author}</p>
+                    <span className={"h-full"}></span>
                     {
                         book.status === BooksStatus.AVAILABLE ? (
-                            <p className={"text-blue-500 p-1 rounded-md"}>Borrow</p>
+                            <p className={"text-green-500 p-1 rounded-md"}>Available</p>
                         ) : (
-                            <p className={" text-red-500 p-1 rounded-md"}>Unavailable</p>
+                            <p className={" text-red-500 p-1 rounded-md"}>Check Availability</p>
                         )
                     }
                 </div>

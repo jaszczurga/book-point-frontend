@@ -46,7 +46,6 @@ export const  BookDetails: React.FC<Props> = ({book}) => {
             <div className="w-full md:w-2/3 p-4">
                 <h1 className="text-2xl md:text-3xl font-bold mb-4">{book.title}</h1>
                 <ShowMoreText text={book.description}/>
-                <p className="text-gray-600 text-sm md:text-base mt-2"><strong>Status:</strong> {book.status}</p>
                 <p className="text-gray-600 text-sm md:text-base"><strong>Author:</strong> {book.author}</p>
                 <p className="text-gray-600 text-sm md:text-base"><strong>ISBN:</strong> {book.isbn}</p>
                 {bookStatus === BooksStatus.AVAILABLE && (
