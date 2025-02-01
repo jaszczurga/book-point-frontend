@@ -34,7 +34,7 @@ export const  BookDetails: React.FC<Props> = ({book}) => {
 
     return (
         <div className="flex flex-col md:flex-row items-center mx-10 md:mx-36 my-16 md:my-24 bg-white shadow-lg rounded-lg p-6">
-            <div className="relative w-full md:w-1/3 flex justify-center mb-6 md:mb-0">
+            <div className="relative w-full md:w-1/3 flex self-start justify-center mb-6 md:mb-0">
                 <Image
                     src={book.img}
                     alt={book.title}
