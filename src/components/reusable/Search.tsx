@@ -2,6 +2,7 @@ import {SearchIcon} from "@/components/icons/SearchIcon";
 import {twMerge} from "tailwind-merge";
 
 type Props = {
+    defaultQuery?: string;
     setSearchQuery: (query: string) => void;
     search?: (query: string) => void;
     className?: string;
@@ -9,12 +10,13 @@ type Props = {
 }
 
 
-export const Search: React.FC<Props> = ({setSearchQuery,search,className,placeholder="Search"}) => {
+export const Search: React.FC<Props> = ({setSearchQuery,search,className,placeholder="Search",defaultQuery}) => {
     return (
         <div className={twMerge("w-full flex flex-row p-2 border bg-pureWhite border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent",className)}>
             <input
                 type="text"
                 placeholder={placeholder}
+                defaultValue={defaultQuery}
                 className="w-full focus:outline-none"
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onBlur={() => search && search("")}

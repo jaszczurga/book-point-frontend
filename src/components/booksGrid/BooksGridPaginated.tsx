@@ -10,8 +10,9 @@ import {FilterList} from "@/components/booksGrid/Filter/FilterList";
 import { CategoryFull} from "@/components/addBookForm/addBookForm";
 import {ParamValue, URLBuilder} from "@/lib/backendApi/URLBuilder";
 import {Search} from "@/components/reusable/Search";
-import {redirect} from "next/navigation";
+import {redirect, useSearchParams} from "next/navigation";
 import Link from "next/link";
+import {useRouter} from "next/router";
 
 export const BooksGridPaginated = () => {
     const size = 12;
@@ -21,6 +22,7 @@ export const BooksGridPaginated = () => {
     const [totalPages, setTotalPages] = useState(0);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [categoriesFilter, setCategoriesFilter] = useState<string[]>([]);
+    const searchParams = useSearchParams();
 
     const api = new FetchWrapper();
 
@@ -40,6 +42,13 @@ export const BooksGridPaginated = () => {
     }
 
     useEffect(() => {
+        if(searchParams.has('page')){
+            setPage(Number(searchParams.get('page')));
+        }
+        if(searchParams.has('q')){
+            setSearchQuery(searchParams.get('q') as string);
+        }
+
             const url = URLBuilder
                 .builder
                 .setBaseUrl(ApiConfig.Endpoints.Books.All)
@@ -71,7 +80,12 @@ export const BooksGridPaginated = () => {
     return (
         <div className={"flex flex-col mb-10"}>
             <div className={"w-full h-full flex justify-center bg-blue-900"}>
-                <Search setSearchQuery={handleQueryChange} className={"p-3 md:w-[60%] w-[80%] my-5"} placeholder={"Search by: title, author, isbn"}/>
+                <Search
+                    setSearchQuery={handleQueryChange}
+                    className={"p-3 md:w-[60%] w-[80%] my-5"}
+                    placeholder={"Search by: title, author, isbn"}
+                    defaultQuery={searchQuery}
+                />
             </div>
             {
                 categoriesFilter.length > 0 && (
