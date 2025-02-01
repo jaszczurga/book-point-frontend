@@ -9,7 +9,7 @@ import {useState} from "react";
 import {checkExternalSources, ExternalSourcesResponse} from "@/actions/checkExternalSources";
 import {URLBuilder} from "@/lib/backendApi/URLBuilder";
 import ApiConfig from "@/lib/backendApi/apiConfiguration";
-import {sign} from "node:crypto";
+import {ConfirmBorrowDialog} from "@/components/BookDetails/ConfirmBorrowDialog";
 
 
 type Props = {
@@ -20,7 +20,22 @@ export const  BookDetails: React.FC<Props> = ({book}) => {
 
     const { data: session } = useSession();
     const [bookStatus, setBookStatus] = useState<string>(book.status);
+    const [isBorrowDialogOpen, setIsBorrowDialogOpen] = useState<boolean>(false);
     const [ugRecords, setUgRecords] = useState<number | null>(null);
+
+    const closeBorrowDialog = () => {
+        setIsBorrowDialogOpen(false);
+    }
+
+    const openBorrowDialog = () => {
+        setIsBorrowDialogOpen(true);
+    }
+
+    const handleConfirmBorrow = async () => {
+        console.log("Borrow confirmed");
+        closeBorrowDialog();
+        await handleBorrow();
+    }
 
     const handleBorrow = async () => {
         if (!session) {
@@ -54,7 +69,15 @@ export const  BookDetails: React.FC<Props> = ({book}) => {
         }
     }
 
+
+
     return (
+        <>
+            {
+                isBorrowDialogOpen && (
+                    <ConfirmBorrowDialog book={book} onClose={closeBorrowDialog} onConfirm={handleConfirmBorrow}/>
+                )
+            }
         <div className="flex flex-col md:flex-row items-center mx-10 md:mx-36 my-16 md:my-24 bg-white shadow-lg rounded-lg p-6">
             <div className="relative w-full md:w-1/3 flex self-start justify-center mb-6 md:mb-0">
                 <Image
@@ -74,13 +97,13 @@ export const  BookDetails: React.FC<Props> = ({book}) => {
                     {bookStatus === BooksStatus.AVAILABLE && (
                         <button
                             className="bg-green-500 text-white p-2 rounded-md mt-4"
-                            onClick={handleBorrow}
+                            onClick={openBorrowDialog}
                         >
                             Borrow now
                         </button>
                     )}
                     <button
-                        className="bg-red-500 text-white p-2 rounded-md mt-4"
+                        className="bg-colorHeader text-white p-2 rounded-md mt-4"
                         onClick={handleCheckAvailability}
                     >
                         Check Availability
@@ -103,10 +126,11 @@ export const  BookDetails: React.FC<Props> = ({book}) => {
                     )}
                     {
                         ugRecords === 0 && (
-                            <p className="text-red-500 text-sm">No Information found</p>
+                            <p className="text-red-600 text-sm">No records found</p>
                         )
                     }
             </div>
         </div>
+        </>
     );
 }
