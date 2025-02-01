@@ -18,6 +18,9 @@ const ApiConfig = {
         GoogleBooks: {
             Search: '/api/v1/books/google',
         },
+        ExternalCheck: {
+            checkAll: '/api/v1/books/external-sources'
+        }
     },
 };
 

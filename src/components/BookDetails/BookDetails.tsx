@@ -4,8 +4,12 @@ import Image from "next/image";
 import {BooksStatus} from "@/lib/utils/BooksStatus";
 import {ShowMoreText} from "@/components/reusable/ShowMoreText";
 import {borrowBook} from "@/actions/borrowBook";
-import {useSession} from "next-auth/react";
+import {signIn, useSession} from "next-auth/react";
 import {useState} from "react";
+import {checkExternalSources, ExternalSourcesResponse} from "@/actions/checkExternalSources";
+import {URLBuilder} from "@/lib/backendApi/URLBuilder";
+import ApiConfig from "@/lib/backendApi/apiConfiguration";
+import {sign} from "node:crypto";
 
 
 type Props = {
@@ -16,20 +20,38 @@ export const  BookDetails: React.FC<Props> = ({book}) => {
 
     const { data: session } = useSession();
     const [bookStatus, setBookStatus] = useState<string>(book.status);
+    const [ugRecords, setUgRecords] = useState<number | null>(null);
 
-    const handleBorrow =  async () => {
-        console.log("Borrow button clicked"+ book._links);
-        const borrowBookHateos = book._links.borrowBook;
-        if(borrowBookHateos){
-            await borrowBook(borrowBookHateos.href, session || undefined);
-            setBookStatus(BooksStatus.BORROWED);
-        }else {
-            alert("Borrow link not found");
+    const handleBorrow = async () => {
+        if (!session) {
+            await signIn("keycloak");
+            return;
         }
-    }
+        console.log(`Borrow button clicked: ${book._links}`);
+        const borrowBookHateos = book?._links?.borrowBook;
+        if (!borrowBookHateos) {
+            alert("Borrow link not found");
+            return;
+        }
+        await borrowBook(borrowBookHateos.href, session);
+        setBookStatus(BooksStatus.BORROWED);
+    };
 
-    const handleCheckAvailability = () => {
+    const handleCheckAvailability = async () => {
         console.log("Check availability button clicked");
+        const url = URLBuilder
+            .builder
+            .setBaseUrl(
+                ApiConfig.BaseUrl+ApiConfig.Endpoints.ExternalCheck.checkAll)
+            .addParam("isbn", book.isbn)
+            .toString();
+
+        try {
+            const res: ExternalSourcesResponse =  await checkExternalSources(url);
+            setUgRecords(res.universityOfGdansk);
+        }catch (e){
+            console.error("Error checking external sources", e);
+        }
     }
 
     return (
@@ -48,22 +70,42 @@ export const  BookDetails: React.FC<Props> = ({book}) => {
                 <ShowMoreText text={book.description}/>
                 <p className="text-gray-600 text-sm md:text-base"><strong>Author:</strong> {book.author}</p>
                 <p className="text-gray-600 text-sm md:text-base"><strong>ISBN:</strong> {book.isbn}</p>
-                {bookStatus === BooksStatus.AVAILABLE && (
+                <div className={"flex flex-col max-w-[150px]"}>
+                    {bookStatus === BooksStatus.AVAILABLE && (
+                        <button
+                            className="bg-green-500 text-white p-2 rounded-md mt-4"
+                            onClick={handleBorrow}
+                        >
+                            Borrow now
+                        </button>
+                    )}
                     <button
-                        className="bg-green-500 text-white px-4 py-2 rounded-md mt-4"
-                        onClick={handleBorrow}
-                    >
-                        Borrow now
-                    </button>
-                )}
-                {bookStatus === BooksStatus.BORROWED && (
-                    <button
-                        className="bg-red-500 text-white px-4 py-2 rounded-md mt-4"
+                        className="bg-red-500 text-white p-2 rounded-md mt-4"
                         onClick={handleCheckAvailability}
                     >
                         Check Availability
                     </button>
-                )}
+                </div>
+                    { ugRecords !==null && ugRecords > 0 && (
+                        <div className="mt-2 flex items-center space-x-2">
+                            <p className="text-green-700 text-sm">
+                                {ugRecords} records found in University of Gdansk
+                            </p>
+                            <a
+                                href={`https://katalog-bug.ug.edu.pl/discovery/search?query=any,contains,${book.isbn}&tab=Everything&search_scope=MyInst_and_CI&vid=48FAR_UGD:48UGD&offset=0`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition duration-200 shadow-md"
+                            >
+                                Check Now
+                            </a>
+                        </div>
+                    )}
+                    {
+                        ugRecords === 0 && (
+                            <p className="text-red-500 text-sm">No Information found</p>
+                        )
+                    }
             </div>
         </div>
     );
