@@ -12,6 +12,10 @@ export interface Link {
     href: string;
 }
 
+export interface BookHateoas {
+    borrowBook: Link;
+}
+
 export interface Book {
     id: string;
     title: string;
@@ -24,7 +28,7 @@ export interface Book {
     status: string;
     createdAt: string;
     updatedAt: string;
-    links: Link[];
+    _links: BookHateoas;
 }
 
 export interface Page {
