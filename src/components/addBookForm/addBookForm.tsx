@@ -37,7 +37,7 @@ export interface CategoryFull {
 export const AddBookForm: React.FC<Props> = ({session, title, description, author, isbn, imgUrl }) => {
     const { register,control,handleSubmit,setValue, reset ,formState: {errors}} = useForm<IAddBookFormSchema>({ resolver: zodResolver(FormSchema),
     });
-    const [categories, setCategories] = useState<Category[]>([]);
+    const [categories, setCategories] = useState<CategoryFull[]>([]);
     const api = new FetchWrapper();
     const onSubmit =  async (data: IAddBookFormSchema) => {
         console.log("Form data", data);
@@ -68,7 +68,7 @@ export const AddBookForm: React.FC<Props> = ({session, title, description, autho
             }
         }
         const fetchCategories = async () => {
-            const categoriesResponse = await api.get<Category[]>(ApiConfig.Endpoints.Categories.All);
+            const categoriesResponse = await api.get<CategoryFull[]>(ApiConfig.Endpoints.Categories.AllFull);
             setCategories(categoriesResponse);
         };
         fetchCategories();
