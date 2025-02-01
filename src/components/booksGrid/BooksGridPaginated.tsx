@@ -34,6 +34,11 @@ export const BooksGridPaginated = () => {
         console.log(categoriesFilter);
     };
 
+    const handleQueryChange = (query: string) => {
+        setSearchQuery(query);
+        setPage(0);
+    }
+
     useEffect(() => {
             const url = URLBuilder
                 .builder
@@ -66,7 +71,7 @@ export const BooksGridPaginated = () => {
     return (
         <div className={"flex flex-col mb-10"}>
             <div className={"w-full h-full flex justify-center bg-blue-900"}>
-                <Search setSearchQuery={setSearchQuery} className={"p-3 md:w-[60%] w-[80%] my-5"} placeholder={"Search by: title, author, isbn"}/>
+                <Search setSearchQuery={handleQueryChange} className={"p-3 md:w-[60%] w-[80%] my-5"} placeholder={"Search by: title, author, isbn"}/>
             </div>
             {
                 categoriesFilter.length > 0 && (
