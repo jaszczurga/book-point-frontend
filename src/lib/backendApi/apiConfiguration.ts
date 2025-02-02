@@ -20,6 +20,12 @@ const ApiConfig = {
         },
         ExternalCheck: {
             checkAll: '/api/v1/books/external-sources'
+        },
+        Loans: {
+            userLoans: '/loans',
+        },
+        Customer: {
+            getCurrent: '/customers/get-customer',
         }
     },
 };

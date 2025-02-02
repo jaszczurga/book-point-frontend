@@ -28,8 +28,8 @@ export const authOptions: NextAuthConfig = {
                     firstname: user.name as string,
                     lastname: user.name as string
                 }
-                console.log('JWT-> User to validate: ', userToValidate)
-                console.log('JWT-> Token: ', token)
+                // console.log('JWT-> User to validate: ', userToValidate)
+                // console.log('JWT-> Token: ', token)
                 await api.post<ValidateUserRes,ValidateUserReq>(`${ApiConfig.Endpoints.Auth.Validate}`,userToValidate);
             }
 
@@ -40,11 +40,11 @@ export const authOptions: NextAuthConfig = {
             }
         },
         session({session, token}: { session: Session, token: JWT }) {
-            console.log("SESSION-> TOKEN: ", token)
+            // console.log("SESSION-> TOKEN: ", token)
             if(token){
                 session.accessToken = token.access_token as string;
             }
-            console.log('session: ', session)
+            // console.log('session: ', session)
             return session
         },
         authorized: async ({auth}) => {
@@ -54,7 +54,7 @@ export const authOptions: NextAuthConfig = {
     events: {
         async signOut(message: { session: void | AdapterSession | null | undefined; } | { token: JWT | null; }) {
             if ('token' in message && message.token) {
-                console.log("logout action for token: ", message.token);
+                // console.log("logout action for token: ", message.token);
                 await fetch(`http://localhost:8081/realms/book-point/protocol/openid-connect/logout?id_token_hint=${message.token.id_token}`);
             }
         }
