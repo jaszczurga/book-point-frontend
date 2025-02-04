@@ -11,6 +11,7 @@ import {URLBuilder} from "@/lib/backendApi/URLBuilder";
 import ApiConfig from "@/lib/backendApi/apiConfiguration";
 import {ConfirmBorrowDialog} from "@/components/BookDetails/ConfirmBorrowDialog";
 import {FetchError} from "@/lib/backendApi/fetchWrapper";
+import {CustomPopup} from "@/components/reusable/CustomPopup";
 
 
 type Props = {
@@ -23,6 +24,7 @@ export const  BookDetails: React.FC<Props> = ({book}) => {
     const [bookStatus, setBookStatus] = useState<string>(book.status);
     const [isBorrowDialogOpen, setIsBorrowDialogOpen] = useState<boolean>(false);
     const [ugRecords, setUgRecords] = useState<number | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
     const closeBorrowDialog = () => {
         setIsBorrowDialogOpen(false);
@@ -53,7 +55,7 @@ export const  BookDetails: React.FC<Props> = ({book}) => {
             await borrowBook(borrowBookHateos.href, session);
         }catch (e){
             if(e instanceof FetchError){
-                alert(e.message);
+                setError(e.message);
             }
             return;
         }
@@ -81,6 +83,7 @@ export const  BookDetails: React.FC<Props> = ({book}) => {
 
     return (
         <>
+            {error && <CustomPopup message={error} onClose={() => setError(null)} />}
             {
                 isBorrowDialogOpen && (
                     <ConfirmBorrowDialog book={book} onClose={closeBorrowDialog} onConfirm={handleConfirmBorrow}/>
