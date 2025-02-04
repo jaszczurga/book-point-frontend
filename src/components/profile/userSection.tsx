@@ -20,11 +20,15 @@ export const UserSection: React.FC<Props> = async ({customer,session}) => {
     }
 
     return (
-        <div>
-            <div className="flex flex-col justify-center items-center">
-                <p className={"text-colorHeader"}>Hello {customer.firstname}</p>
-                {booksRes ? <p className={"text-colorHeader"}>You have added {booksRes.length} books</p> : <p>Failed to load number of user books</p>}
-            </div>
+        <div className="flex flex-col items-center justify-center p-4">
+            <h2 className="text-xl font-semibold text-gray-800">Hello, {customer.firstname}!</h2>
+            {booksRes ? (
+                <p className="text-gray-700 mt-2">
+                    You have added <span className="font-bold">{booksRes.length}</span> books.
+                </p>
+            ) : (
+                <p className="text-red-500 mt-2">Failed to load your books.</p>
+            )}
         </div>
     )
 }
