@@ -39,14 +39,29 @@ class FetchWrapper {
             const response = await fetch(url, options);
 
             if (!response.ok) {
-                console.log('error response:', response);
-                throw new FetchError(response.status);
+                let errorBody: any;
+                try {
+                    errorBody = await response.json(); // Attempt to parse JSON error response
+                } catch {
+                    throw new FetchError(response.status, "Unknown error from server");
+                }
+
+                const errorCode = errorBody?.errorCode || "UNKNOWN_ERROR";
+                const errorMessage = errorBody?.errorMessage || `HTTP error! Status: ${response.status}`;
+                const errorPath = errorBody?.apiPath || "Unknown path";
+                const errorTime = errorBody?.errorTime || new Date().toISOString();
+
+                throw new FetchError(response.status, errorMessage, errorCode, errorPath, errorTime);
             }
 
             return (await response.json()) as T;
         } catch (error) {
             console.error('FetchWrapper request error:', error);
-            throw error;
+            if (error instanceof FetchError) {
+                throw error;
+            } else {
+                throw new FetchError(0, "Network error: Unable to reach API");
+            }
         }
     }
 
@@ -71,12 +86,24 @@ class FetchWrapper {
     }
 }
 
-class FetchError extends Error {
+export class FetchError extends Error {
     status: number;
-    name: string;
-    constructor(status: number, message: string = "No error message provided") {
+    errorCode: string;
+    apiPath: string;
+    errorTime: string;
+
+    constructor(
+        status: number,
+        message: string = "Unknown error",
+        errorCode: string = "UNKNOWN_ERROR",
+        apiPath: string = "Unknown path",
+        errorTime: string = new Date().toISOString()
+    ) {
         super(message);
         this.status = status;
+        this.errorCode = errorCode;
+        this.apiPath = apiPath;
+        this.errorTime = errorTime;
         this.name = 'FetchError';
     }
 }

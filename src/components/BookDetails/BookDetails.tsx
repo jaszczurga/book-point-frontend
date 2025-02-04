@@ -10,6 +10,7 @@ import {checkExternalSources, ExternalSourcesResponse} from "@/actions/checkExte
 import {URLBuilder} from "@/lib/backendApi/URLBuilder";
 import ApiConfig from "@/lib/backendApi/apiConfiguration";
 import {ConfirmBorrowDialog} from "@/components/BookDetails/ConfirmBorrowDialog";
+import {FetchError} from "@/lib/backendApi/fetchWrapper";
 
 
 type Props = {
@@ -48,7 +49,14 @@ export const  BookDetails: React.FC<Props> = ({book}) => {
             alert("Borrow link not found");
             return;
         }
-        await borrowBook(borrowBookHateos.href, session);
+        try{
+            await borrowBook(borrowBookHateos.href, session);
+        }catch (e){
+            if(e instanceof FetchError){
+                alert(e.message);
+            }
+            return;
+        }
         setBookStatus(BooksStatus.BORROWED);
     };
 
