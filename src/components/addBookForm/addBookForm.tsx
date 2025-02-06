@@ -5,7 +5,7 @@ import { FormSchema, IAddBookFormSchema } from "@/components/addBookForm/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {FileDrop} from "@/components/addBookForm/fileDrop";
 import {Session} from "next-auth";
-import {addBook} from "@/actions/addBook";
+import {addBook} from "@/actions/bookActions/addBook";
 import {useEffect, useState} from "react";
 import FetchWrapper from "@/lib/backendApi/fetchWrapper";
 import ApiConfig from "@/lib/backendApi/apiConfiguration";

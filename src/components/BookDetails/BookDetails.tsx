@@ -3,7 +3,7 @@ import {Book} from "@/actions/getBooks";
 import Image from "next/image";
 import {BooksStatus} from "@/lib/utils/BooksStatus";
 import {ShowMoreText} from "@/components/reusable/ShowMoreText";
-import {borrowBook} from "@/actions/borrowBook";
+import {borrowBook} from "@/actions/bookActions/borrowBook";
 import {signIn, useSession} from "next-auth/react";
 import {useState} from "react";
 import {checkExternalSources, ExternalSourcesResponse} from "@/actions/checkExternalSources";
