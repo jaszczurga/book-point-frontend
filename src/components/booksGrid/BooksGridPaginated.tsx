@@ -1,6 +1,4 @@
-'use client';
 import {BookCard} from "@/components/booksGrid/BookCard";
-import {useEffect, useState} from "react";
 import {Book, BooksResponse} from "@/actions/getBooks";
 import {Pagination} from "@/components/reusable/Pagination";
 import FetchWrapper from "@/lib/backendApi/fetchWrapper";
@@ -9,79 +7,50 @@ import {Filter} from "@/components/booksGrid/Filter/Filter";
 import {FilterList} from "@/components/booksGrid/Filter/FilterList";
 import {CategoryFull} from "@/components/addBookForm/addBookForm";
 import {URLBuilder} from "@/lib/backendApi/URLBuilder";
-import {Search} from "@/components/reusable/Search";
-import {useSearchParams} from "next/navigation";
 import Link from "next/link";
 import {SearchBook} from "@/components/reusable/SearchBook";
 
+type Props = {
+    searchParams: {
+        searchQuery?: string;
+        page?: string;
+        categories?: string[];
+    } | undefined;
+}
 
-export const BooksGridPaginated = () => {
+export const BooksGridPaginated: React.FC<Props> = async ({searchParams}) => {
     const size = 12;
-    const [books, setBooks] = useState<Book[]>([]);
-    const [categories, setCategories] = useState<CategoryFull[]>([]);
-    const [page, setPage] = useState(0);
-    const [totalPages, setTotalPages] = useState(0);
-    const [searchQuery, setSearchQuery] = useState<string>('');
-    const [categoriesFilter, setCategoriesFilter] = useState<string[]>([]);
-    const [onlyAvailable, setOnlyAvailable] = useState<boolean>(false);
-    const searchParams = useSearchParams();
+
+    let books: Book[] = [];
+    let categories: CategoryFull[] = [];
+    let totalPageCount = 0;
 
     const api = new FetchWrapper();
-
-
-    const toggleCategoryFilter = (categoryName: string) => {
-        setCategoriesFilter((prev) =>
-            prev.includes(categoryName)
-                ? prev.filter((category) => category !== categoryName)
-                : [...prev, categoryName]
-        );
-        console.log(categoriesFilter);
-    };
-
-    const handleQueryChange = (query: string) => {
-        setSearchQuery(query);
-        setPage(0);
-    }
-
-    useEffect(() => {
-        if(searchParams.has('page')){
-            setPage(Number(searchParams.get('page')));
-        }
-        if(searchParams.has('q')){
-            setSearchQuery(searchParams.get('q') as string);
-        }
-        if(searchParams.has('available')){
-            setOnlyAvailable(searchParams.get('available') === 'true');
-        }
 
             const url = URLBuilder
                 .builder
                 .setBaseUrl(ApiConfig.Endpoints.Books.All)
-                .addParam('page', page)
+                .addParam('page', searchParams?.page || 0)
                 .addParam('size', size)
-                .addParam('status', onlyAvailable ? 'available' : '')
-                .addParam('categories', categoriesFilter)
-                .addParam('searchQuery', searchQuery)
+                // .addParam('status', onlyAvailable ? 'available' : '')
+                .addParam('categories', searchParams?.categories)
+                .addParam('searchQuery', searchParams?.searchQuery || '')
                 .toString();
             console.log(url);
 
-        const fetchBooks = async () => {
-            const bookResponse = await api.get<BooksResponse>(url);
-            setBooks(bookResponse.content);
-            setTotalPages(bookResponse.page.totalPages);
-        }
-        fetchBooks();
-    }
-    , [page,categoriesFilter,searchQuery,onlyAvailable]);
+            try {
+                const bookResponse = await api.get<BooksResponse>(url);
+                books = bookResponse.content;
+                totalPageCount = bookResponse.page.totalPages;
+            }catch (e) {
+                console.error(e);
+            }
 
-    useEffect(() => {
-            const fetchCategories = async () => {
-                const categoriesResponse = await api.get<CategoryFull[]>(ApiConfig.Endpoints.Categories.AllFull);
-                setCategories(categoriesResponse);
-            };
-            fetchCategories();
-        }
-        , []);
+            try {
+                categories = await api.get<CategoryFull[]>(ApiConfig.Endpoints.Categories.AllFull);
+            }catch (e) {
+                console.error(e);
+            }
 
     return (
         <div className={"flex flex-col mb-10"}>
@@ -89,18 +58,18 @@ export const BooksGridPaginated = () => {
                 <SearchBook
                     className={"p-3 md:w-[60%] w-[80%] my-5"}
                     placeholder={"Search by: title, author, isbn"}
-                    defaultQuery={searchQuery}
+                    defaultQuery={searchParams?.searchQuery}
                 />
             </div>
             {
-                categoriesFilter.length > 0 && (
+                categories.length > 0 && (
                     <div className={"flex flex-wrap justify-center items-center mt-5 gap-3"}>
-                        {categoriesFilter.map((category) => (
+                        {categories.map((category) => (
                             <div
-                                key={category}
+                                key={category.id}
                                 className={"bg-blue-100 border border-blue-300 text-blue-500 px-4 py-2 rounded-md shadow-md"}
                             >
-                                <p className={"text-sm"}>{category}</p>
+                                <p className={"text-sm"}>{category.name}</p>
                             </div>
                         ))}
                     </div>
@@ -120,19 +89,19 @@ export const BooksGridPaginated = () => {
                             <Filter key={category.id} category={category}/>
                         ))
                     }
-                    <div className="flex items-center justify-start mx-4 my-2">
-                        <input
-                            type="checkbox"
-                            id="onlyAvailable"
-                            checked={onlyAvailable}
-                            onChange={() => setOnlyAvailable(prev => !prev)}
-                            className="mr-2 w-4 h-4"
-                        />
-                        <label htmlFor="onlyAvailable" className="text-colorHeader text-sm">Show only available books</label>
-                    </div>
+                    {/*<div className="flex items-center justify-start mx-4 my-2">*/}
+                    {/*    <input*/}
+                    {/*        type="checkbox"*/}
+                    {/*        id="onlyAvailable"*/}
+                    {/*        checked={onlyAvailable}*/}
+                    {/*        onChange={() => setOnlyAvailable(prev => !prev)}*/}
+                    {/*        className="mr-2 w-4 h-4"*/}
+                    {/*    />*/}
+                    {/*    <label htmlFor="onlyAvailable" className="text-colorHeader text-sm">Show only available books</label>*/}
+                    {/*</div>*/}
                 </FilterList>
             </div>
-            <Pagination totalPages={5}/>
+            <Pagination totalPages={totalPageCount}/>
         </div>
     )
 }

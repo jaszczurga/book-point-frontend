@@ -17,15 +17,15 @@ export const Filter: React.FC<Props> = ({category}) => {
 
     const handleCategoryChange = (categoryName: string) => {
         const params = new URLSearchParams(searchParams);
-        const existingCategories = params.get('category')?.split(',') || [];
+        const existingCategories = params.get('categories')?.split(',') || [];
 
         if (existingCategories.includes(categoryName)) {
             const updatedCategories = existingCategories.filter(category => category !== categoryName);
             updatedCategories.length > 0
-                ? params.set('category', updatedCategories.join(','))
-                : params.delete('category');
+                ? params.set('categories', updatedCategories.join(','))
+                : params.delete('categories');
         } else {
-            params.set('category', [...existingCategories, categoryName].join(','));
+            params.set('categories', [...existingCategories, categoryName].join(','));
         }
         replace(`${pathname}?${params.toString()}`);
     };
