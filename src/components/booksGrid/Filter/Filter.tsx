@@ -1,18 +1,36 @@
 'use client'
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {ArrowDown} from "@/components/icons/ArrowDown";
 import {ArrowUp} from "@/components/icons/ArrowUp";
-import {Category, CategoryFull} from "@/components/addBookForm/addBookForm";
-import FetchWrapper from "@/lib/backendApi/fetchWrapper";
+import {CategoryFull} from "@/components/addBookForm/addBookForm";
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
 
 type Props = {
     category: CategoryFull;
-    toggleCategory: (categoryName: string) => void;
 }
 
-export const Filter: React.FC<Props> = ({category, toggleCategory}) => {
+export const Filter: React.FC<Props> = ({category}) => {
 
-   const [open, setOpen] = useState(false);
+    const searchParams = useSearchParams();
+    const pathname = usePathname();
+    const { replace } = useRouter();
+
+    const handleCategoryChange = (categoryName: string) => {
+        const params = new URLSearchParams(searchParams);
+        const existingCategories = params.get('category')?.split(',') || [];
+
+        if (existingCategories.includes(categoryName)) {
+            const updatedCategories = existingCategories.filter(category => category !== categoryName);
+            updatedCategories.length > 0
+                ? params.set('category', updatedCategories.join(','))
+                : params.delete('category');
+        } else {
+            params.set('category', [...existingCategories, categoryName].join(','));
+        }
+        replace(`${pathname}?${params.toString()}`);
+    };
+
+    const [open, setOpen] = useState(false);
 
     return (
         <div className="flex flex-col items-center justify-center">
@@ -38,7 +56,7 @@ export const Filter: React.FC<Props> = ({category, toggleCategory}) => {
                                     type="checkbox"
                                     value=""
                                     className="w-4 h-4 mx-2 bg-pureWhite text-colorHeader "
-                                    onChange={() => toggleCategory(category.name)}
+                                    onChange={() => handleCategoryChange(category.name)}
                                 />
                                 <label
                                     className="ml-2 text-sm font-medium"

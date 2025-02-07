@@ -1,29 +1,43 @@
 'use client';
 import {ArrowRight} from "@/components/icons/ArrowRight";
 import {ArrowLeft} from "@/components/icons/ArrowLeft";
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
 
 type Props = {
-    page: number;
     totalPages: number;
-    setPage: (page: number) => void;
 }
 
 
-export const Pagination: React.FC<Props> = ({page, totalPages, setPage}) => {
+export const Pagination: React.FC<Props> = ({ totalPages}) => {
+
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const { replace } = useRouter();
+    const currentPage = Number(searchParams.get('page')) || 0;
+
+    const createPageURL = (pageNumber: number | string) => {
+        const params = new URLSearchParams(searchParams);
+        params.set('page', pageNumber.toString());
+        return `${pathname}?${params.toString()}`;
+    };
+
+    const handlePageChange = (pageNumber: number) => {
+        replace(createPageURL(pageNumber));
+    }
 
     return(
         <div className="flex justify-center items-center space-x-4">
             <button
-                disabled={page === 0}
-                onClick={() => setPage(page - 1)}
+                disabled={currentPage === 0}
+                onClick={() => handlePageChange(currentPage - 1)}
                 className="bg-pureWhite text-colorHeader text-xl p-3 rounded-md"
             >
                 <ArrowLeft />
             </button>
-            <span className="text-black p-2">{page+1} ... {totalPages}</span>
+            <span className="text-black p-2">{currentPage+1} ... {totalPages}</span>
             <button
-                disabled={page === totalPages-1}
-                onClick={() => setPage(page + 1)}
+                disabled={currentPage === totalPages-1}
+                onClick={() => handlePageChange(currentPage + 1)}
                 className="bg-pureWhite text-colorHeader text-xl p-3 rounded-md"
             >
                 <ArrowRight />
