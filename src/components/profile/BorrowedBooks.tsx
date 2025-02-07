@@ -5,6 +5,7 @@ import Image from "next/image";
 import {formatDateToPolish, getDaysLeft} from "@/lib/utils/dateFormatter";
 import {returnBook} from "@/actions/bookActions/returnBook";
 import {useState} from "react";
+import Link from "next/link";
 
 
 type Props = {
@@ -42,6 +43,7 @@ export const BorrowedBooks: React.FC<Props> = ({Loans,session}) => {
                 {Loans.map((loan, index) => (
                     <div key={index} className="flex items-center p-6 bg-gray-100 rounded-lg shadow-md">
                         <div className="relative w-40 h-40 flex-shrink-0 mr-6">
+                            <Link key={loan.book.id} href={`/library/${loan.book.id}`}>
                             <Image
                                 src={loan.book.img}
                                 alt={loan.bookUUID}
@@ -49,6 +51,7 @@ export const BorrowedBooks: React.FC<Props> = ({Loans,session}) => {
                                 objectFit="cover"
                                 className="rounded-md"
                             />
+                            </Link>
                         </div>
                         <div className="flex-1 space-y-2">
                             <p className="text-2xl font-semibold text-gray-900">{loan.book.title}</p>

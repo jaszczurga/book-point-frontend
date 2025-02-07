@@ -6,6 +6,7 @@ import { Book, Link, Page } from "@/actions/getBooks";
 import { URLBuilder } from "@/lib/backendApi/URLBuilder";
 import { UserSection } from "@/components/profile/userSection";
 import {BorrowedBooks} from "@/components/profile/BorrowedBooks";
+import {Pagination} from "@/components/reusable/Pagination";
 
 export default async function Account() {
     const session = await auth();

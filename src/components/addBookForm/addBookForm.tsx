@@ -11,6 +11,8 @@ import FetchWrapper from "@/lib/backendApi/fetchWrapper";
 import ApiConfig from "@/lib/backendApi/apiConfiguration";
 import {CategoryDropDown} from "@/components/addBookForm/CategoryDropDown";
 import {fetchGoogleBook} from "@/actions/fetchGoogleBook";
+import {CustomPopup} from "@/components/reusable/CustomPopup";
+import {redirect} from "next/navigation";
 
 type Props = Partial<{
     session: Session;
@@ -37,12 +39,14 @@ export interface CategoryFull {
 export const AddBookForm: React.FC<Props> = ({session, title, description, author, isbn, imgUrl }) => {
     const { register,control,handleSubmit,setValue, reset ,formState: {errors}} = useForm<IAddBookFormSchema>({ resolver: zodResolver(FormSchema),
     });
+    const [bookAddedPopup, setBookAddedPopup] = useState<string | null>(null);
     const [categories, setCategories] = useState<CategoryFull[]>([]);
     const api = new FetchWrapper();
     const onSubmit =  async (data: IAddBookFormSchema) => {
         console.log("Form data", data);
-        alert("Book added successfully");
-        await addBook(data, data.bookImg, session);
+        setBookAddedPopup("Book has been added");
+        const res = await addBook(data, data.bookImg, session);
+        redirect('/library/'+res.id);
     }
 
     useEffect(() => {
@@ -76,7 +80,8 @@ export const AddBookForm: React.FC<Props> = ({session, title, description, autho
     }
     , [imgUrl]);
 
-    return (
+    return (<>
+        {bookAddedPopup && <CustomPopup className={"bg-green-500"} message={bookAddedPopup} onClose={() => setBookAddedPopup(null)} />}
             <form className="space-y-6"  onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <label className="block text-sm font-medium text-gray-700">Title</label>
@@ -157,5 +162,6 @@ export const AddBookForm: React.FC<Props> = ({session, title, description, autho
                     Submit
                 </button>
             </form>
+        </>
     )
 }
