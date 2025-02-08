@@ -60,7 +60,6 @@ export const BooksGridPaginated: React.FC<Props> = async ({searchParams}) => {
                 <SearchBook
                     className={"p-3 md:w-[60%] w-[80%] my-5"}
                     placeholder={"Search by: title, author, isbn"}
-                    defaultQuery={searchParams?.searchQuery}
                 />
             </div>
             {
