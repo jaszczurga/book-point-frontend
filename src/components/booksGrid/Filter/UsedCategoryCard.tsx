@@ -30,11 +30,11 @@ export const UsedCategoryCard: React.FC<Props> = ({category}) => {
             className={"flex flex-row justify-center items-center  bg-blue-100 border border-blue-300 text-blue-500 px-4 py-2 rounded-md shadow-md"}
         >
             <p className={"text-sm"}>{category}</p>
-            <div
-            onClick={handleCloseCategory}
-            >
-                <CloseIcon className={"text-blue-500 ml-3"}/>
-            </div>
+            {/*<div*/}
+            {/*onClick={handleCloseCategory}*/}
+            {/*>*/}
+            {/*    <CloseIcon className={"text-blue-500 ml-3"}/>*/}
+            {/*</div>*/}
         </div>
     )
 }

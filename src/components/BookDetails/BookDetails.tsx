@@ -130,7 +130,7 @@ export const  BookDetails: React.FC<Props> = ({book}) => {
                                 className="flex items-center gap-2 px-4 py-2 rounded-lg transition duration-200"
                             >
                                 <div className="text-colorHeader hover:text-green-500 text-sm flex flex-row justify-center items-center">
-                                    <MouseIcon className={"text-green-500"}/> {ugRecords} records found in University of Gdansk
+                                    <MouseIcon className={"text-green-500"}/> {ugRecords} records found at University of Gdansk
                                 </div>
                             </a>
                         </div>
