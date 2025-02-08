@@ -7,11 +7,13 @@ import { URLBuilder } from "@/lib/backendApi/URLBuilder";
 import { UserSection } from "@/components/profile/userSection";
 import {BorrowedBooks} from "@/components/profile/BorrowedBooks";
 import {Pagination} from "@/components/reusable/Pagination";
+import {CheckboxSingle} from "@/components/reusable/CheckboxSingle";
 
 
 type Props = {
     searchParams?: Promise<{
         page?: string;
+        state?: string;
     }>;
 }
 
@@ -36,6 +38,7 @@ export default async function Account(props: Props) {
         const url = URLBuilder.builder
             .setBaseUrl(ApiConfig.Endpoints.Loans.userLoans)
             .addParam("page", searchParams?.page || "0")
+            .addParam("state", searchParams?.state || "")
             .addParam("size", "4")
             .addParam("sort", "borrowDate,desc")
             .toString();
@@ -48,6 +51,7 @@ export default async function Account(props: Props) {
     return (
         <div className="max-w-5xl mx-auto p-6 rounded-xl">
             {CustomerResponse ? <UserSection customer={CustomerResponse} session={session} /> : <p className="text-red-500">Could not load user details</p>}
+            <CheckboxSingle param={"state"} title={"borrowed books"} toggleValue={"BORROWED"} />
             {LoansResponse && LoansResponse.content.length > 0 ? (
                 <BorrowedBooks Loans={LoansResponse.content} session={session} />
             ) : (

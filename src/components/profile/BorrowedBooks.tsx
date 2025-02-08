@@ -4,7 +4,7 @@ import {Session} from "next-auth";
 import Image from "next/image";
 import {formatDateToPolish, getDaysLeft} from "@/lib/utils/dateFormatter";
 import {returnBook} from "@/actions/bookActions/returnBook";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Link from "next/link";
 
 
@@ -16,19 +16,25 @@ type Props = {
 
 export const BorrowedBooks: React.FC<Props> = ({Loans,session}) => {
 
-    const [loans, setLoans] = useState<Loan[]>(Loans);
+    const [loans, setLoans] = useState<Loan[]>([]);
+
+    useEffect(() => {
+        setLoans(Loans);
+    }
+    , [Loans]);
 
     const handleReturn = async (loan: Loan) => {
         try {
             console.log(loan.book)
             const res = await returnBook(`/loans/${loan.book.id}/return`, session);
-            const updatedLoans = loans.map((l) => {
+            const updatedLoans = Loans.map((l) => {
                 if (l.book.id === loan.book.id) {
                     l.state = res.state;
                 }
                 return l;
             });
             setLoans(updatedLoans);
+            console.log(Loans);
         } catch (e) {
             console.error("Failed to return book", e);
         }
@@ -40,7 +46,7 @@ export const BorrowedBooks: React.FC<Props> = ({Loans,session}) => {
         <div className="mt-8">
             <h1 className="text-4xl font-extrabold mb-8 text-center text-gray-800">Borrowed Books</h1>
             <div className="grid gap-6">
-                {Loans.map((loan, index) => (
+                {loans.map((loan, index) => (
                     <div key={index} className="flex items-center p-6 bg-gray-100 rounded-lg shadow-md">
                         <div className="relative w-40 h-40 flex-shrink-0 mr-6">
                             <Link key={loan.book.id} href={`/library/${loan.book.id}`}>
