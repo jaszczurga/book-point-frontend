@@ -4,7 +4,7 @@ type Props = {
     searchParams?: Promise<{
         searchQuery?: string;
         page?: string;
-        categories?: string[];
+        categories?: string;
         status?: string;
     }>;
 }

@@ -15,7 +15,7 @@ type Props = {
     searchParams: {
         searchQuery?: string;
         page?: string;
-        categories?: string[];
+        categories?: string;
         status?: string;
     } | undefined;
 }
@@ -64,14 +64,14 @@ export const BooksGridPaginated: React.FC<Props> = async ({searchParams}) => {
                 />
             </div>
             {
-                categories.length > 0 && (
+                searchParams?.categories && (
                     <div className={"flex flex-wrap justify-center items-center mt-5 gap-3"}>
-                        {categories.map((category) => (
+                        {searchParams.categories.split(',').map((category) => (
                             <div
-                                key={category.id}
+                                key={category}
                                 className={"bg-blue-100 border border-blue-300 text-blue-500 px-4 py-2 rounded-md shadow-md"}
                             >
-                                <p className={"text-sm"}>{category.name}</p>
+                                <p className={"text-sm"}>{category}</p>
                             </div>
                         ))}
                     </div>
