@@ -23,6 +23,7 @@ export const AvailableBookCheckbox = () => {
         <div className="flex items-center justify-start mx-4 my-2">
             <input
                 type="checkbox"
+                defaultChecked={searchParams.get('status') === 'available'}
                 id="onlyAvailable"
                 onChange={handleAvailableChange}
                 className="mr-2 w-4 h-4"

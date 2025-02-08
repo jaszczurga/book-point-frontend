@@ -30,6 +30,7 @@ export const CheckboxSingle: React.FC<Props> = ({param,title,toggleValue}) => {
             <input
                 type="checkbox"
                 id="onlyAvailable"
+                defaultChecked={searchParams.get(param) === toggleValue}
                 onChange={handleAvailableChange}
                 className="mr-2 w-4 h-4"
             />

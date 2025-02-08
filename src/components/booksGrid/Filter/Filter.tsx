@@ -55,6 +55,7 @@ export const Filter: React.FC<Props> = ({category}) => {
                                 <input
                                     type="checkbox"
                                     value=""
+                                    defaultChecked={searchParams.get('categories')?.split(',').includes(category.name)}
                                     className="w-4 h-4 mx-2 bg-pureWhite text-colorHeader "
                                     onChange={() => handleCategoryChange(category.name)}
                                 />

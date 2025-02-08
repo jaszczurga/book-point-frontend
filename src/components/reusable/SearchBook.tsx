@@ -5,16 +5,16 @@ import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {useDebouncedCallback} from "use-debounce";
 
 type Props = {
-    defaultQuery?: string;
     className?: string;
     placeholder?: string;
 }
 
 
-export const SearchBook: React.FC<Props> = ({className,placeholder="Search",defaultQuery}) => {
+export const SearchBook: React.FC<Props> = ({className,placeholder="Search"}) => {
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const { replace } = useRouter();
+    const [defaultQuery] = searchParams.getAll('searchQuery');
 
     const handleSearch = useDebouncedCallback((term) => {
         console.log(`Searching... ${term}`);
