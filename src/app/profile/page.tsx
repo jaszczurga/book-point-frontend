@@ -40,7 +40,7 @@ export default async function Account(props: Props) {
             .addParam("page", searchParams?.page || "0")
             .addParam("state", searchParams?.state || "")
             .addParam("size", "4")
-            .addParam("sort", "borrowDate,desc")
+            .addParam("sort", "createdDate,desc")
             .toString();
 
         LoansResponse = await api.get<LoanResponse>(url);

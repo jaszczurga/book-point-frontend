@@ -10,6 +10,7 @@ import {URLBuilder} from "@/lib/backendApi/URLBuilder";
 import Link from "next/link";
 import {SearchBook} from "@/components/reusable/SearchBook";
 import {AvailableBookCheckbox} from "@/components/booksGrid/Filter/AvailableBookCheckbox";
+import {UsedCategoryCard} from "@/components/booksGrid/Filter/UsedCategoryCard";
 
 type Props = {
     searchParams: {
@@ -66,12 +67,7 @@ export const BooksGridPaginated: React.FC<Props> = async ({searchParams}) => {
                 searchParams?.categories && (
                     <div className={"flex flex-wrap justify-center items-center mt-5 gap-3"}>
                         {searchParams.categories.split(',').map((category) => (
-                            <div
-                                key={category}
-                                className={"bg-blue-100 border border-blue-300 text-blue-500 px-4 py-2 rounded-md shadow-md"}
-                            >
-                                <p className={"text-sm"}>{category}</p>
-                            </div>
+                            <UsedCategoryCard category={category} key={category}/>
                         ))}
                     </div>
                 )
@@ -87,7 +83,7 @@ export const BooksGridPaginated: React.FC<Props> = async ({searchParams}) => {
                 <FilterList className={"md:w-[30%] w-full"}>
                     {
                         categories.map((category) => (
-                            <Filter key={category.id} category={category}/>
+                            <Filter key={category.id} category={category} />
                         ))
                     }
                     <AvailableBookCheckbox />

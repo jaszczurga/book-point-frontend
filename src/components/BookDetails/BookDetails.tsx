@@ -12,6 +12,7 @@ import ApiConfig from "@/lib/backendApi/apiConfiguration";
 import {ConfirmBorrowDialog} from "@/components/BookDetails/ConfirmBorrowDialog";
 import {FetchError} from "@/lib/backendApi/fetchWrapper";
 import {CustomPopup} from "@/components/reusable/CustomPopup";
+import {MouseIcon} from "@/components/icons/MouseIcon";
 
 
 type Props = {
@@ -122,16 +123,15 @@ export const  BookDetails: React.FC<Props> = ({book}) => {
                 </div>
                     { ugRecords !==null && ugRecords > 0 && (
                         <div className="mt-2 flex items-center space-x-2">
-                            <p className="text-green-700 text-sm">
-                                {ugRecords} records found in University of Gdansk
-                            </p>
                             <a
                                 href={`https://katalog-bug.ug.edu.pl/discovery/search?query=any,contains,${book.isbn}&tab=Everything&search_scope=MyInst_and_CI&vid=48FAR_UGD:48UGD&offset=0`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition duration-200 shadow-md"
+                                className="flex items-center gap-2 px-4 py-2 rounded-lg transition duration-200"
                             >
-                                Check Now
+                                <div className="text-colorHeader hover:text-green-500 text-sm flex flex-row justify-center items-center">
+                                    <MouseIcon className={"text-green-500"}/> {ugRecords} records found in University of Gdansk
+                                </div>
                             </a>
                         </div>
                     )}

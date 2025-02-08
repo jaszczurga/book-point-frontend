@@ -61,7 +61,6 @@ export const BorrowedBooks: React.FC<Props> = ({Loans,session}) => {
                         </div>
                         <div className="flex-1 space-y-2">
                             <p className="text-2xl font-semibold text-gray-900">{loan.book.title}</p>
-                            <p className="text-sm text-gray-700">State: <span className="font-medium">{loan.state}</span></p>
                             <p className="text-sm text-gray-700">Borrowed: <span className="font-medium">{formatDateToPolish(loan.borrowDate)}</span></p>
                             <p className="text-sm text-gray-700">Return by: <span className="font-medium">{formatDateToPolish(loan.returnDate)}</span></p>
                             {
