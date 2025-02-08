@@ -2,13 +2,15 @@
 import {ArrowRight} from "@/components/icons/ArrowRight";
 import {ArrowLeft} from "@/components/icons/ArrowLeft";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import {twMerge} from "tailwind-merge";
 
 type Props = {
     totalPages: number;
+    className?: string;
 }
 
 
-export const Pagination: React.FC<Props> = ({ totalPages}) => {
+export const Pagination: React.FC<Props> = ({ totalPages,className}) => {
 
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -26,7 +28,9 @@ export const Pagination: React.FC<Props> = ({ totalPages}) => {
     }
 
     return(
-        <div className="flex justify-center items-center space-x-4">
+        <div
+            className={twMerge("flex justify-center items-center space-x-4",className)}
+        >
             <button
                 disabled={currentPage === 0}
                 onClick={() => handlePageChange(currentPage - 1)}

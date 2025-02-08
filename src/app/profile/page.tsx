@@ -8,7 +8,15 @@ import { UserSection } from "@/components/profile/userSection";
 import {BorrowedBooks} from "@/components/profile/BorrowedBooks";
 import {Pagination} from "@/components/reusable/Pagination";
 
-export default async function Account() {
+
+type Props = {
+    searchParams?: Promise<{
+        page?: string;
+    }>;
+}
+
+export default async function Account(props: Props) {
+    const searchParams = await props.searchParams;
     const session = await auth();
     if (!session) {
         redirect("/");
@@ -27,8 +35,8 @@ export default async function Account() {
     try {
         const url = URLBuilder.builder
             .setBaseUrl(ApiConfig.Endpoints.Loans.userLoans)
-            .addParam("page", "0")
-            .addParam("size", "1000")
+            .addParam("page", searchParams?.page || "0")
+            .addParam("size", "4")
             .addParam("sort", "borrowDate,desc")
             .toString();
 
@@ -45,6 +53,7 @@ export default async function Account() {
             ) : (
                 <p className="text-xl font-semibold text-gray-700 text-center mt-10">No loans found.</p>
             )}
+            <Pagination totalPages={LoansResponse?.page.totalPages || 0} className={"my-5"}/>
         </div>
     );
 }
