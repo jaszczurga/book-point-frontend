@@ -22,7 +22,7 @@ export const Pagination: React.FC<Props> = ({ totalPages}) => {
     };
 
     const handlePageChange = (pageNumber: number) => {
-        replace(createPageURL(pageNumber));
+        replace(createPageURL(pageNumber), {scroll: false});
     }
 
     return(

@@ -18,7 +18,7 @@ export const Filter: React.FC<Props> = ({category}) => {
     const handleCategoryChange = (categoryName: string) => {
         const params = new URLSearchParams(searchParams);
         const existingCategories = params.get('categories')?.split(',') || [];
-
+        params.delete('page');
         if (existingCategories.includes(categoryName)) {
             const updatedCategories = existingCategories.filter(category => category !== categoryName);
             updatedCategories.length > 0
@@ -27,7 +27,7 @@ export const Filter: React.FC<Props> = ({category}) => {
         } else {
             params.set('categories', [...existingCategories, categoryName].join(','));
         }
-        replace(`${pathname}?${params.toString()}`);
+        replace(`${pathname}?${params.toString()}`, {scroll: false});
     };
 
     const [open, setOpen] = useState(false);

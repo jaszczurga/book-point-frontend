@@ -5,6 +5,7 @@ type Props = {
         searchQuery?: string;
         page?: string;
         categories?: string[];
+        status?: string;
     }>;
 }
 

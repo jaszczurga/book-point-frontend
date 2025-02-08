@@ -9,12 +9,14 @@ import {CategoryFull} from "@/components/addBookForm/addBookForm";
 import {URLBuilder} from "@/lib/backendApi/URLBuilder";
 import Link from "next/link";
 import {SearchBook} from "@/components/reusable/SearchBook";
+import {AvailableBookCheckbox} from "@/components/booksGrid/Filter/AvailableBookCheckbox";
 
 type Props = {
     searchParams: {
         searchQuery?: string;
         page?: string;
         categories?: string[];
+        status?: string;
     } | undefined;
 }
 
@@ -32,7 +34,7 @@ export const BooksGridPaginated: React.FC<Props> = async ({searchParams}) => {
                 .setBaseUrl(ApiConfig.Endpoints.Books.All)
                 .addParam('page', searchParams?.page || 0)
                 .addParam('size', size)
-                // .addParam('status', onlyAvailable ? 'available' : '')
+                .addParam('status', searchParams?.status ? 'available' : '')
                 .addParam('categories', searchParams?.categories)
                 .addParam('searchQuery', searchParams?.searchQuery || '')
                 .toString();
@@ -89,16 +91,7 @@ export const BooksGridPaginated: React.FC<Props> = async ({searchParams}) => {
                             <Filter key={category.id} category={category}/>
                         ))
                     }
-                    {/*<div className="flex items-center justify-start mx-4 my-2">*/}
-                    {/*    <input*/}
-                    {/*        type="checkbox"*/}
-                    {/*        id="onlyAvailable"*/}
-                    {/*        checked={onlyAvailable}*/}
-                    {/*        onChange={() => setOnlyAvailable(prev => !prev)}*/}
-                    {/*        className="mr-2 w-4 h-4"*/}
-                    {/*    />*/}
-                    {/*    <label htmlFor="onlyAvailable" className="text-colorHeader text-sm">Show only available books</label>*/}
-                    {/*</div>*/}
+                    <AvailableBookCheckbox />
                 </FilterList>
             </div>
             <Pagination totalPages={totalPageCount}/>

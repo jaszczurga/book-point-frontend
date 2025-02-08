@@ -26,7 +26,7 @@ export const SearchBook: React.FC<Props> = ({className,placeholder="Search",defa
         } else {
             params.delete('searchQuery');
         }
-        replace(`${pathname}?${params.toString()}`);
+        replace(`${pathname}?${params.toString()}`, {scroll: false});
     }, 300);
 
     return (
