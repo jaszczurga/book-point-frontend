@@ -24,8 +24,8 @@ export const  BookDetails: React.FC<Props> = ({book}) => {
     const { data: session } = useSession();
     const [bookStatus, setBookStatus] = useState<string>(book.status);
     const [isBorrowDialogOpen, setIsBorrowDialogOpen] = useState<boolean>(false);
-    const [ugRecords, setUgRecords] = useState<number | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [sourceList, setSourceList] = useState<Source[] | null>(null);
 
     const closeBorrowDialog = () => {
         setIsBorrowDialogOpen(false);
@@ -73,8 +73,8 @@ export const  BookDetails: React.FC<Props> = ({book}) => {
             .toString();
 
         try {
-            const res: ExternalSourcesResponse =  await checkExternalSources(url);
-            setUgRecords(res.universityOfGdansk);
+            const res: Source[] =  await checkExternalSources(url);
+            setSourceList(res.filter((s) => s.records>0));
         }catch (e){
             console.error("Error checking external sources", e);
         }
@@ -121,22 +121,46 @@ export const  BookDetails: React.FC<Props> = ({book}) => {
                         Check Availability
                     </button>
                 </div>
-                    { ugRecords !==null && ugRecords > 0 && (
-                        <div className="mt-2 flex items-center space-x-2">
-                            <a
-                                href={`https://katalog-bug.ug.edu.pl/discovery/search?query=any,contains,${book.isbn}&tab=Everything&search_scope=MyInst_and_CI&vid=48FAR_UGD:48UGD&offset=0`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-2 px-4 py-2 rounded-lg transition duration-200"
-                            >
-                                <div className="text-colorHeader hover:text-green-500 text-sm flex flex-row justify-center items-center">
-                                    <MouseIcon className={"text-green-500"}/> {ugRecords} records found at University of Gdansk
-                                </div>
-                            </a>
+                    {/*{ ugRecords !==null && ugRecords > 0 && (*/}
+                    {/*    <div className="mt-2 flex items-center space-x-2">*/}
+                    {/*        <a*/}
+                    {/*            href={`https://katalog-bug.ug.edu.pl/discovery/search?query=any,contains,${book.isbn}&tab=Everything&search_scope=MyInst_and_CI&vid=48FAR_UGD:48UGD&offset=0`}*/}
+                    {/*            target="_blank"*/}
+                    {/*            rel="noopener noreferrer"*/}
+                    {/*            className="flex items-center gap-2 px-4 py-2 rounded-lg transition duration-200"*/}
+                    {/*        >*/}
+                    {/*            <div className="text-colorHeader hover:text-green-500 text-sm flex flex-row justify-center items-center">*/}
+                    {/*                <MouseIcon className={"text-green-500"}/> {ugRecords} records found at University of Gdansk*/}
+                    {/*            </div>*/}
+                    {/*        </a>*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
+                {
+                    sourceList && sourceList.length>0 && (
+                        <div className="mt-2">
+                            <h3 className="text-lg font-semibold">External sources</h3>
+                            <ul className="list-disc list-inside">
+                                {
+                                    sourceList.map((source) => (
+                                        <div key={source.sourceName} className={"flex flex-row items-center my-3 text-colorHeader  hover:text-green-500"}>
+                                            <MouseIcon/>
+                                            <a
+                                                href={source.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-sm"
+                                            >
+                                                {source.sourceName} - {source.records} records
+                                            </a>
+                                        </div>
+                                    ))
+                                }
+                            </ul>
                         </div>
-                    )}
+                    )
+                }
                     {
-                        ugRecords === 0 && (
+                        sourceList && sourceList.length===0 && (
                             <p className="text-red-600 text-sm">No records found</p>
                         )
                     }
@@ -144,4 +168,11 @@ export const  BookDetails: React.FC<Props> = ({book}) => {
         </div>
         </>
     );
+}
+
+
+export interface Source {
+    records: number;
+    sourceName: string;
+    url: string;
 }
