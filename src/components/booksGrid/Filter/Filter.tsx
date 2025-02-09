@@ -35,6 +35,7 @@ export const Filter: React.FC<Props> = ({category}) => {
     return (
         <div className="flex flex-col items-center justify-center">
             <div
+                data-testid="filter-open-button"
                 id="dropdownDefault"
                 data-dropdown-toggle="dropdown"
                 className="text-colorHeader bg-pureWhite font-medium text-sm px-4 py-2.5 text-center inline-flex items-center justify-between w-full cursor-pointer"

@@ -12,14 +12,14 @@ type Props = {
 export const BookCard: React.FC<Props> =({ book }) => {
 
     return (
-        <Card>
-            <div className="flex flex-col items-center w-full" >
+        <Card testId={"book-card"}>
+            <div className="flex flex-col items-center w-full">
                 <div className={"relative h-[150px] w-full"}>
                     <Image src={book.img} alt={book.title} className="object-cover rounded-sm" fill />
                 </div>
                 <div className={"flex flex-col text-sm p-2 w-full h-32"}>
                     <h1>Title: {book.title}</h1>
-                    <p>Author: {book.author}</p>
+                    <p>Author: {book.author?.split(',')[0]}</p>
                     <span className={"h-full"}></span>
                     {
                         book.status === BooksStatus.AVAILABLE ? (

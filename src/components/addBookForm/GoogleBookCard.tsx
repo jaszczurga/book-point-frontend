@@ -12,7 +12,9 @@ export const GoogleBookCard: React.FC<Props> = ({book}) => {
 
 
     return (
-        <div className={"rounded-md border-0"}>
+        <div
+            data-testid="add-book-img-popup"
+            className={"rounded-md border-0"}>
             <div className="flex flex-col justify-center items-center w-full bg-colorHeader">
                 <div className={"relative flex justify-center items-center h-[250px] w-full"}>
                     <Image src={book?.img ? book.img : "http://localhost:4566/book-photos/wp7644556.webp" } alt={book.title} className="rounded-sm" width={150} height={150}/>

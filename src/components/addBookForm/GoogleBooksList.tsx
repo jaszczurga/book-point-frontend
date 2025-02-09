@@ -59,6 +59,7 @@ export const GoogleBooksList: React.FC<Props> = ({ handleClose,setBook }) => {
 
     return (
         <div
+            data-testid="google-books-popup"
             className="h-full fixed bg-black bg-opacity-40 w-full start-0 top-0 z-10"
             onClick={() => handleClose(null)}
         >

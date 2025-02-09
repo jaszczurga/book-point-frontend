@@ -33,6 +33,7 @@ export default function Home() {
 
                     <div>
                         <Link
+                            data-testid="continue-button"
                             className="bg-green-500 text-white p-2 rounded-md"
                             href="/library"
                         >

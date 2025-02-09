@@ -20,7 +20,7 @@ export const AvailableBookCheckbox = () => {
 
 
     return (
-        <div className="flex items-center justify-start mx-4 my-2">
+        <div className="flex items-center justify-start mx-4 my-2" data-testid="show-available-cards">
             <input
                 type="checkbox"
                 defaultChecked={searchParams.get('status') === 'available'}

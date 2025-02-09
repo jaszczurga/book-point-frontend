@@ -108,6 +108,7 @@ export const  BookDetails: React.FC<Props> = ({book}) => {
                 <div className={"flex flex-col max-w-[150px]"}>
                     {bookStatus === BooksStatus.AVAILABLE && (
                         <button
+                            data-testid="borrow-button"
                             className="bg-green-500 text-white p-2 rounded-md mt-4"
                             onClick={openBorrowDialog}
                         >
@@ -115,6 +116,7 @@ export const  BookDetails: React.FC<Props> = ({book}) => {
                         </button>
                     )}
                     <button
+                        data-testid="check-availability"
                         className="bg-colorHeader text-white p-2 rounded-md mt-4"
                         onClick={handleCheckAvailability}
                     >
