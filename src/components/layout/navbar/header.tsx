@@ -22,7 +22,6 @@ export const Header = () => {
     const navItems: NavItemData[] = [
         { href: '/', label: 'Home' },
         { href: '/library', label: 'Library' },
-        { href: '/profile', label: 'Profile' },
     ];
 
     return (
@@ -36,6 +35,10 @@ export const Header = () => {
                             <NavItem key={item.label} href={item.href} label={item.label}
                                      isActive={pathName === item.href}/>
                         ))}
+                        {session && (
+                            <NavItem key={"profile"} href={"/profile"} label={"Profile"}
+                                     isActive={pathName === "/profile"}/>
+                        )}
                         <AuthButton session={session}/>
                     </ul>
                 </div>
