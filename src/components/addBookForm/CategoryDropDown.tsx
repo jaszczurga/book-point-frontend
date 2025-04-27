@@ -7,7 +7,7 @@ type Props = {
     register: any;
 }
 
-export const CategoryDropDown: React.FC<Props> = ({category, setCategory, register}) => {
+export const CategoryDropDown: React.FC<Props> = ({category, register}) => {
 
     return (
         <select

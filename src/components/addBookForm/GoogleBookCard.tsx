@@ -1,5 +1,3 @@
-import {Book} from "@/actions/getBooks";
-import {Card} from "@/components/reusable/Card";
 import Image from "next/image";
 import {GoogleBook} from "@/components/addBookForm/GoogleBooksList";
 

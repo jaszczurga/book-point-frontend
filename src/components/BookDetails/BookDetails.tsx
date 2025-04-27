@@ -6,7 +6,7 @@ import {ShowMoreText} from "@/components/reusable/ShowMoreText";
 import {borrowBook} from "@/actions/bookActions/borrowBook";
 import {signIn, useSession} from "next-auth/react";
 import {useState} from "react";
-import {checkExternalSources, ExternalSourcesResponse} from "@/actions/checkExternalSources";
+import {checkExternalSources} from "@/actions/checkExternalSources";
 import {URLBuilder} from "@/lib/backendApi/URLBuilder";
 import ApiConfig from "@/lib/backendApi/apiConfiguration";
 import {ConfirmBorrowDialog} from "@/components/BookDetails/ConfirmBorrowDialog";

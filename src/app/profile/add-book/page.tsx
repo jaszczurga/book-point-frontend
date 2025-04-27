@@ -1,6 +1,7 @@
 import {AddBookSection} from "@/components/addBookForm/AddBookSection";
-import {auth} from "@/app/api/auth/[...nextauth]/route";
 import {redirect} from "next/navigation";
+import {auth} from "@/lib/auth";
+
 
 
 export default async function Page() {

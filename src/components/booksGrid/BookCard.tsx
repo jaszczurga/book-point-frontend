@@ -1,9 +1,7 @@
 import Image from "next/image";
 import { Card } from "@/components/reusable/Card";
 import { Book } from "@/actions/getBooks";
-import {auth} from "@/app/api/auth/[...nextauth]/route";
 import {BooksStatus} from "@/lib/utils/BooksStatus";
-import Link from "next/link";
 
 type Props = {
     book: Book;

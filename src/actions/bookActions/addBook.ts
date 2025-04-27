@@ -31,7 +31,7 @@ interface BookToSave {
     status?: string;
     author: string;
     isbn: string;
-    categories?: String[];
+    categories?: string[];
 }
 
 interface BookResponseDto {

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { BookCard } from "@/components/booksGrid/BookCard";
 import { Search } from "@/components/reusable/Search";
 import { URLBuilder } from "@/lib/backendApi/URLBuilder";
 import ApiConfig from "@/lib/backendApi/apiConfiguration";
@@ -39,10 +38,6 @@ export const GoogleBooksList: React.FC<Props> = ({ handleClose,setBook }) => {
         }
         fetchBooks();
     }, []);
-
-    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchTerm(e.target.value);
-    };
 
     const handlePrev = () => {
         setCurrentImageIndex((prevIndex) => (prevIndex === 0 ? books.length - 1 : prevIndex - 1));

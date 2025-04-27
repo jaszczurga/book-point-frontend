@@ -1,4 +1,3 @@
-import { auth } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import FetchWrapper from "@/lib/backendApi/fetchWrapper";
 import ApiConfig from "@/lib/backendApi/apiConfiguration";
@@ -8,6 +7,7 @@ import { UserSection } from "@/components/profile/userSection";
 import {BorrowedBooks} from "@/components/profile/BorrowedBooks";
 import {Pagination} from "@/components/reusable/Pagination";
 import {CheckboxSingle} from "@/components/reusable/CheckboxSingle";
+import {auth} from "@/lib/auth";
 
 
 type Props = {

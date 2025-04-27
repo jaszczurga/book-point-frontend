@@ -1,6 +1,6 @@
 'use client'
 
-import {useFieldArray, useForm} from "react-hook-form";
+import { useForm} from "react-hook-form";
 import { FormSchema, IAddBookFormSchema } from "@/components/addBookForm/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {FileDrop} from "@/components/addBookForm/fileDrop";
